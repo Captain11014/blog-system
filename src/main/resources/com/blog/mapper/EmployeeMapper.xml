@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace=mapper接口类全路径-->
+<mapper namespace="com.blog.mapper.EmployeeMapper">
+    <!--id=mapper接口中的方法名-->
+
+
+    <resultMap id="EmployeeResultMapper" type="Employee">
+        <id column="emp_id" property="empId"></id>
+        <result column="emp_name" property="empName"></result>
+        <result column="age" property="age"></result>
+        <result column="gender" property="gender"></result>
+        <result column="email" property="email"></result>
+    </resultMap>
+
+    <select id="getEmployeeList" resultMap="EmployeeResultMapper">
+        select * from t_emp
+    </select>
+
+
+</mapper>
