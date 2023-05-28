@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blog.mapper.ArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.blog.model.Article" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from article
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.blog.model.Article" >
+    insert into article (id, title, user_id,
+      status, del_flag, create_by, 
+      create_time, update_by, update_time, 
+      remark, content)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, 
+      #{status,jdbcType=CHAR}, #{delFlag,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.blog.model.Article" >
+
+    update article
+    set title = #{title,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      status = #{status,jdbcType=CHAR},
+      del_flag = #{delFlag,jdbcType=CHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+
+    select id, title, user_id, status, del_flag, create_by, create_time, update_by, update_time, 
+    remark, content
+    from article
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+
+    select id, title, user_id, status, del_flag, create_by, create_time, update_by, update_time, 
+    remark, content
+    from article
+  </select>
+</mapper>
