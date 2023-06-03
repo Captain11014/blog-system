@@ -89,6 +89,18 @@ export const constantRoutes = [
       },
     ]
   },
+  {
+    path: '/system/sysUser',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: '用户管理',
+        component: () => import('@/views/system/sysUser/index'),
+        meta: { title: '用户管理', icon: 'table' }
+      },
+    ]
+  },
 
   {
     path: '/form',

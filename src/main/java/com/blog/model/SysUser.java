@@ -1,5 +1,6 @@
 package com.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 
 /**
@@ -43,7 +45,8 @@ public class SysUser extends BaseEntity{
     /**
      * 出生日期
      */
-    private LocalDate birthday;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date birthday;
 
     /**
      * 昵称
@@ -73,7 +76,7 @@ public class SysUser extends BaseEntity{
     /**
      * 状态（0：正常 1：停用）
      */
-    private Integer status;
+    private String status;
 
 
     /**

@@ -41,6 +41,11 @@ public class SysRole extends BaseEntity {
     private String roleCode;
 
     /**
+     *角色状态（0正常 1停用）
+     */
+    private String status;
+
+    /**
      * 描述
      */
     private String description;

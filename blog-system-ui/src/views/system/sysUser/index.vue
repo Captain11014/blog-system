@@ -8,32 +8,47 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="角色名称" prop="roleName">
+      <el-form-item label="用户名" prop="username">
         <el-input
-          v-model="queryParams.roleName"
-          placeholder="请输入角色名称"
+          v-model="queryParams.username"
+          placeholder="请输入用户名"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="权限字符" prop="roleCode">
+      <!-- <el-form-item label="密码" prop="password">
         <el-input
-          v-model="queryParams.roleCode"
-          placeholder="请输入权限字符"
+          v-model="queryParams.password"
+          placeholder="请输入密码"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>-->
+      <!-- <el-form-item label="出生日期" prop="birthday">
+        <el-date-picker clearable
+          v-model="queryParams.birthday"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择出生日期">
+        </el-date-picker>
+      </el-form-item>-->
+      <el-form-item label="昵称" prop="nickname">
+        <el-input
+          v-model="queryParams.nickname"
+          placeholder="请输入昵称"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="角色状态" clearable>
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+      <el-form-item label="手机" prop="phone">
+        <el-input
+          v-model="queryParams.phone"
+          placeholder="请输入手机"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -64,22 +79,24 @@
           @click="handleDelete"
         >删除</el-button>
       </el-col>
-      <!-- <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-        >导出</el-button>
-      </el-col>-->
-      <!-- <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar> -->
     </el-row>
 
-    <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" width="120" />
-      <el-table-column label="角色名称" align="center" prop="roleName" width="150" />
-      <el-table-column label="权限字符" align="center" prop="roleCode" width="150" />
+      <el-table-column label="id" align="center" prop="id" />
+      <el-table-column label="用户名" align="center" prop="username" />
+      <!-- <el-table-column label="密码" align="center" prop="password" /> -->
+      <!-- <el-table-column label="出生日期" align="center" prop="birthday" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.birthday, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>-->
+      <el-table-column label="昵称" align="center" prop="nickname" />
+      <el-table-column label="手机" align="center" prop="phone" />
+      <!-- <el-table-column label="头像地址" align="center" prop="headUrl" />
+      <el-table-column label="微信openId" align="center" prop="openId" />-->
+      <!-- <el-table-column label="描述" align="center" prop="description" /> -->
+      <!-- <el-table-column label="状态" align="center" prop="status" /> -->
       <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope" v-if="scope.row.id != 1">
           <el-switch
@@ -90,16 +107,10 @@
           ></el-switch>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="描述" align="center" prop="description" /> -->
-      <el-table-column label="创建时间" align="center" prop="createTime" />
+      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope" v-if="scope.row.id != 1">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-aim"
-          >分配用户</el-button>
           <el-button
             size="mini"
             type="text"
@@ -118,21 +129,44 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改角色对话框 -->
+    <!-- 添加或修改用户对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="角色名称" prop="roleName">
-          <el-input v-model="form.roleName" placeholder="请输入角色名称" />
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="form.username" placeholder="请输入用户名" />
         </el-form-item>
-        <el-form-item label="角色编码" prop="roleCode">
-          <el-input v-model="form.roleCode" placeholder="请输入角色编码" />
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="form.password" placeholder="请输入密码" />
+        </el-form-item>
+        <!-- <el-form-item label="出生日期" prop="birthday">
+          <el-date-picker clearable
+            v-model="form.birthday"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择出生日期">
+          </el-date-picker>
+        </el-form-item>-->
+        <el-form-item label="昵称" prop="nickname">
+          <el-input v-model="form.nickname" placeholder="请输入昵称" />
+        </el-form-item>
+        <el-form-item label="手机" prop="phone">
+          <el-input v-model="form.phone" placeholder="请输入手机" />
+        </el-form-item>
+        <!-- <el-form-item label="头像地址" prop="headUrl">
+          <el-input v-model="form.headUrl" placeholder="请输入头像地址" />
+        </el-form-item>
+        <el-form-item label="微信openId" prop="openId">
+          <el-input v-model="form.openId" placeholder="请输入微信openId" />
         </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input v-model="form.description" placeholder="请输入描述" />
+        </el-form-item>-->
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
-        <el-form-item label="删除标志" prop="delFlag">
+        <!-- <el-form-item label="删除标志" prop="delFlag">
           <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -144,15 +178,15 @@
 
 <script>
 import {
-  listRole,
-  getRole,
-  delRole,
-  addRole,
-  updateRole
-} from "@/api/system/sysRole";
+  listUser,
+  getUser,
+  delUser,
+  addUser,
+  updateUser
+} from "@/api/system/sysUser";
 
 export default {
-  name: "Role",
+  name: "User",
   data() {
     return {
       // 遮罩层
@@ -167,8 +201,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 角色表格数据
-      roleList: [],
+      // 用户表格数据
+      userList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -177,27 +211,25 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        roleName: undefined,
-        roleCode: undefined,
-        description: undefined,
-        status: undefined
+        username: null,
+        password: null,
+        birthday: null,
+        nickname: null,
+        phone: null,
+        headUrl: null,
+        openId: null,
+        description: null,
+        status: null
       },
-      options: [
-        {
-          value: "0",
-          label: "启用"
-        },
-        {
-          value: "1",
-          label: "停用"
-        }
-      ],
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        roleName: [
-          { required: true, message: "角色名称不能为空", trigger: "blur" }
+        username: [
+          { required: true, message: "用户名不能为空", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" }
         ],
         createTime: [
           { required: true, message: "创建时间不能为空", trigger: "blur" }
@@ -212,11 +244,12 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询角色列表 */
+    /** 查询用户列表 */
     getList() {
       this.loading = true;
-      listRole(this.queryParams).then(response => {
-        this.roleList = response.rows;
+      listUser(this.queryParams).then(response => {
+        this.userList = response.rows;
+        console.log(response);
         this.total = response.total;
         this.loading = false;
       });
@@ -230,12 +263,18 @@ export default {
     reset() {
       this.form = {
         id: null,
-        roleName: null,
-        roleCode: null,
-        status: null,
+        username: null,
+        password: null,
+        birthday: null,
+        nickname: null,
+        phone: null,
+        headUrl: null,
+        openId: null,
         description: null,
+        status: null,
         createTime: null,
         updateTime: null,
+        remark: null,
         delFlag: null
       };
       this.resetForm("form");
@@ -260,16 +299,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加角色";
+      this.title = "添加用户";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids;
-      getRole(id).then(response => {
+      getUser(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改角色";
+        this.title = "修改用户";
       });
     },
     /** 提交按钮 */
@@ -277,13 +316,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateRole(this.form).then(response => {
+            updateUser(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addRole(this.form).then(response => {
+            addUser(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -292,21 +331,7 @@ export default {
         }
       });
     },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$modal
-        .confirm('是否确认删除角色编号为"' + ids + '"的数据项？')
-        .then(function() {
-          return delRole(ids);
-        })
-        .then(() => {
-          this.getList();
-          this.$modal.msgSuccess("删除成功");
-        })
-        .catch(() => {});
-    },
-    // 角色状态修改
+     // 用户状态修改
     handleStatusChange(row) {
       console.log(row.status);
       let text = row.status === "0" ? "启用" : "停用";
@@ -314,13 +339,27 @@ export default {
         id:row.id,
         status:row.status
       };
-      this.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗？').then(function() {
-        return updateRole(data);
+      this.$modal.confirm('确认要"' + text + '""' + row.nickname + '"用户吗？').then(function() {
+        return updateUser(data);
       }).then(() => {
         this.$modal.msgSuccess(text + "成功");
       }).catch(function() {
         row.status = row.status === "0" ? "1" : "0";
       });
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const ids = row.id || this.ids;
+      this.$modal
+        .confirm('是否确认删除用户编号为"' + ids + '"的数据项？')
+        .then(function() {
+          return delUser(ids);
+        })
+        .then(() => {
+          this.getList();
+          this.$modal.msgSuccess("删除成功");
+        })
+        .catch(() => {});
     }
   }
 };

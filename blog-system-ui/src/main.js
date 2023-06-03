@@ -4,8 +4,11 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import '@/assets/styles/ruoyi.scss'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import plugins from './plugins' // plugins
+// 分页组件
+import Pagination from "@/components/Pagination"
 
 import '@/styles/index.scss' // global css
 
@@ -16,7 +19,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-import {resetForm} from "@/utils/blog"
+import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree }  from "@/utils/blog"
 
 /**
  * If you don't want to use mock-server
@@ -32,6 +35,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 Vue.prototype.resetForm = resetForm
+Vue.prototype.parseTime = parseTime
+
+
+Vue.component('Pagination', Pagination)
 
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
