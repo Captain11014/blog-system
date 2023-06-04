@@ -20,6 +20,11 @@
         from sys_role
     </sql>
 
+    <sql id="selectSysRoleVo1">
+        select r.id, r.role_name, r.role_code,r.status, r.description, r.create_time, r.update_time, r.del_flag
+        from sys_role r left join sys_user_role ur on r.id = ur.role_id left join sys_user u on u.id = ur.user_id
+    </sql>
+
     <select id="selectSysRoleList" parameterType="SysRole" resultMap="sysRoleResult">
         <include refid="selectSysRoleVo"/>
         <where>
@@ -34,6 +39,11 @@
     <select id="selectSysRoleById" parameterType="Long" resultMap="sysRoleResult">
         <include refid="selectSysRoleVo"></include>
         where id = #{id} and del_flag = '0'
+    </select>
+
+    <select id="selectRoleByUserId" parameterType="Long" resultMap="sysRoleResult">
+        <include refid="selectSysRoleVo1"></include>
+        where r.del_flag = '0' and ur.user_id = #{userId}
     </select>
 
     <insert id="insertSysRole" parameterType="SysRole" useGeneratedKeys="true" keyProperty="id">

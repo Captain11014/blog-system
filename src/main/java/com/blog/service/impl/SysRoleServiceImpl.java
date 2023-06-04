@@ -37,6 +37,28 @@ public class SysRoleServiceImpl  implements SysRoleService {
     }
 
     /**
+     * 根据用户id查询用户所拥有的角色
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<SysRole> selectRoleByUserId(Long userId) {
+
+        List<SysRole> userRoles = sysRoleMapper.selectRoleByUserId(userId);
+        List<SysRole> roles = selectSysRoleList(new SysRole());
+
+        for(SysRole sysRole : roles){
+            for (SysRole userRole : userRoles){
+                if(sysRole.getId().longValue() == userRole.getId().longValue()){
+                    sysRole.setFlag(true);
+                    break;
+                }
+            }
+        }
+        return roles;
+    }
+
+    /**
      * 查询角色列表
      *
      * @param sysRole 角色

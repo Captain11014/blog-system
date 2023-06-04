@@ -62,4 +62,12 @@ public interface SysUserService {
      */
     public int deleteSysUserById(Long id);
 
+    /**
+     * 用户分配角色
+     * @param userId
+     * @param roleIds
+     * @return
+     */
+    public int insertAuthRole(Long userId,Long[] roleIds);
+
 }

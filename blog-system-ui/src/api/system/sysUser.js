@@ -42,3 +42,21 @@ export function delUser(id) {
     method: 'delete'
   })
 }
+
+/**获取用户已有角色 */
+export function getAuthRole(id){
+  return request({
+    url: '/system/user/authRole/' + id,
+    method: 'get'
+  })
+}
+
+
+// 保存授权角色
+export function updateAuthRole(data) {
+  return request({
+    url: '/system/user/updateAuthRole',
+    method: 'post',
+    params: data
+  })
+}

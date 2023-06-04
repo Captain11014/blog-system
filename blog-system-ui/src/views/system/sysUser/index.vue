@@ -111,6 +111,7 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope" v-if="scope.row.id != 1">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-aim" @click="assignRole(scope.row)">分配角色</el-button>
           <el-button
             size="mini"
             type="text"
@@ -360,7 +361,18 @@ export default {
           this.$modal.msgSuccess("删除成功");
         })
         .catch(() => {});
-    }
+    },
+
+    assignRole(row){
+      // alert(row.id);
+      this.$router.push({
+        path:'/system/doAssignRole',
+        query:{
+          id:row.id
+        }
+      })
+    },
+
   }
 };
 </script>

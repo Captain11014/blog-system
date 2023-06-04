@@ -25,6 +25,14 @@ public interface SysRoleService  {
      */
     public SysRole selectSysRoleById(Long id);
 
+
+    /**
+     * 根据用户id查询用户所拥有的角色
+     * @param userId
+     * @return
+     */
+    public List<SysRole> selectRoleByUserId(Long userId);
+
     /**
      * 查询角色列表
      *

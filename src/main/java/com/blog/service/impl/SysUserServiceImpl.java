@@ -1,12 +1,19 @@
 package com.blog.service.impl;
 
+import com.blog.mapper.SysUserRoleMapper;
 import com.blog.model.SysUser;
 import com.blog.mapper.SysUserMapper;
+import com.blog.model.SysUserRole;
+import com.blog.service.SysUserRoleService;
 import com.blog.service.SysUserService;
 import com.blog.util.DateUtils;
+import com.blog.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +29,9 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     /**
      * 查询用户
@@ -95,6 +105,30 @@ public class SysUserServiceImpl implements SysUserService {
     public int deleteSysUserById(Long id)
     {
         return sysUserMapper.deleteSysUserById(id);
+    }
+
+    /**
+     * 用户分配角色
+     * @param userId
+     * @param roleIds
+     * @return
+     */
+    @Override
+    @Transactional
+    public int insertAuthRole(Long userId, Long[] roleIds) {
+
+        sysUserRoleMapper.deleteSysUserRoleByUserId(userId);
+        List<SysUserRole> list = new ArrayList<>();
+        if(StringUtil.isNotNull(roleIds)){
+            for (Long roleId : roleIds){
+                SysUserRole sysUserRole = new SysUserRole();
+                sysUserRole.setUserId(userId);
+                sysUserRole.setRoleId(roleId);
+                list.add(sysUserRole);
+            }
+        }
+
+        return sysUserRoleMapper.batchUserRole(list);
     }
 
 }

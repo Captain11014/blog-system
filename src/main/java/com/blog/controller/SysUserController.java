@@ -1,7 +1,9 @@
 package com.blog.controller;
 
 
+import com.blog.model.SysRole;
 import com.blog.model.SysUser;
+import com.blog.service.SysRoleService;
 import com.blog.service.SysUserService;
 import com.blog.util.base.BaseController;
 import com.blog.util.page.TableDataInfo;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -28,16 +31,17 @@ public class SysUserController extends BaseController {
     @Autowired
     private SysUserService sysUserService;
 
+    @Autowired
+    private SysRoleService sysRoleService;
+
     /**
      * 查询用户列表
      */
     @GetMapping("/list")
     public TableDataInfo list(SysUser sysUser)
     {
-        System.out.println("成功成功成功成功成功成功成功成功成功成功成功成功成功成功成功成功成功成功成功成功");
         startPage();
         List<SysUser> list = sysUserService.selectSysUserList(sysUser);
-        System.out.println(list);
         return getDataTable(list);
     }
 
@@ -77,5 +81,25 @@ public class SysUserController extends BaseController {
     {
         return toAjax(sysUserService.deleteSysUserByIds(ids));
     }
+
+    /**
+     * 根据用户编号获取授权角色
+     */
+    @GetMapping("/authRole/{userId}")
+    public AjaxResult authRole(@PathVariable Long userId){
+
+        SysUser sysUser = sysUserService.selectSysUserById(userId);
+        List<SysRole> sysRoles = sysRoleService.selectRoleByUserId(userId);
+        AjaxResult ajax = success();
+        ajax.put("user",sysUser);
+        ajax.put("roles",SysUser.isAdmin(userId)?sysRoles : sysRoles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
+        return ajax;
+    }
+
+    @PostMapping("/updateAuthRole")
+    public AjaxResult insertAuthRole(Long userId,Long[] roleIds){
+        return toAjax(sysUserService.insertAuthRole(userId,roleIds));
+    }
+
 
 }
