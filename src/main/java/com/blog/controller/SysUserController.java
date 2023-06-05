@@ -96,6 +96,12 @@ public class SysUserController extends BaseController {
         return ajax;
     }
 
+    /**
+     * 用户分配角色·
+     * @param userId
+     * @param roleIds
+     * @return
+     */
     @PostMapping("/updateAuthRole")
     public AjaxResult insertAuthRole(Long userId,Long[] roleIds){
         return toAjax(sysUserService.insertAuthRole(userId,roleIds));

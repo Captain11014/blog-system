@@ -88,5 +88,10 @@ public class SysMenu  extends BaseEntity {
      */
     private List<SysMenu> children;
 
+    /**
+     * 是否被选中
+     */
+    private boolean isSelect = false;
+
 
 }

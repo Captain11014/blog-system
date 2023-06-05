@@ -32,6 +32,13 @@ public interface SysMenuMapper{
     public List<SysMenu> selectSysMenuList(SysMenu sysMenu);
 
     /**
+     * 根据角色id查询菜单列表
+     * @param roleId
+     * @return
+     */
+    public List<SysMenu> selectMenuByRoleId(Long roleId);
+
+    /**
      * 新增菜单
      *
      * @param sysMenu 菜单

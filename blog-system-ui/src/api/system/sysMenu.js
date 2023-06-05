@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询菜单列表
+// 查询树形菜单列表
 export function listMenu(query) {
   return request({
     url: '/system/menu/list',
@@ -42,3 +42,17 @@ export function delMenu(id) {
     method: 'delete'
   })
 }
+
+
+
+// 查询角色菜单
+export function selectRoleList(roleId) {
+  return request({
+    url: '/system/menu/roleList/' + roleId,
+    method: 'get'
+  })
+}
+
+
+
+

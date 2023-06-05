@@ -60,6 +60,9 @@ public class SysRole extends BaseEntity {
      */
     private String delFlag;
 
+    /** 菜单组 */
+    private Long[] menuIds;
+
 
     public boolean isAdmin()
     {

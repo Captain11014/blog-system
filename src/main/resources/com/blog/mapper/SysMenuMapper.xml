@@ -23,6 +23,11 @@
     select id, parent_id, name, type, path, component, perms, icon, sort_value, status, create_time, update_time, del_flag from sys_menu
   </sql>
 
+  <sql id="selectSysMenuVo1">
+    select m.id, m.parent_id, m.name, m.type, m.path, m.component, m.perms, m.icon, m.sort_value, m.status, m.create_time, m.update_time, m.del_flag
+    from sys_menu m left join sys_role_menu rm on m.id = rm.menu_id left join sys_role r on r.id = rm.role_id
+  </sql>
+
   <select id="selectSysMenuList" parameterType="SysMenu" resultMap="SysMenuResult">
     <include refid="selectSysMenuVo"/>
     <where>
@@ -41,6 +46,11 @@
   <select id="selectSysMenuById" parameterType="Long" resultMap="SysMenuResult">
     <include refid="selectSysMenuVo"/>
     where id = #{id}
+  </select>
+
+  <select id="selectMenuByRoleId" parameterType="Long" resultMap="SysMenuResult">
+    <include refid="selectSysMenuVo1"/>
+    where rm.role_id = #{roleId}
   </select>
 
   <insert id="insertSysMenu" parameterType="SysMenu" useGeneratedKeys="true" keyProperty="id">

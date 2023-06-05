@@ -41,6 +41,17 @@ public class SysMenuController extends BaseController {
 
 
     /**
+     * 查询角色菜单列表
+     */
+    @GetMapping("/roleList/{roleId}")
+    public AjaxResult roleList(@PathVariable Long roleId)
+    {
+        List<SysMenu> list = sysMenuService.selectMenuByRoleId(roleId);
+        return success(list);
+    }
+
+
+    /**
      * 获取菜单详细信息
      */
     @GetMapping(value = "/{id}")

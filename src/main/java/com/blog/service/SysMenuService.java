@@ -33,6 +33,20 @@ public interface SysMenuService {
     public List<SysMenu> selectSysMenuList(SysMenu sysMenu);
 
     /**
+     * 根据角色id查询菜单列表
+     * @param roleId
+     * @return
+     */
+    public List<SysMenu> selectMenuByRoleId(Long roleId);
+
+    /**
+     * 根据角色id获取该角色所拥有的菜单列表
+     * @param roleId
+     * @return
+     */
+    public List<SysMenu> getMenuByRoleId(Long roleId);
+
+    /**
      * 新增菜单
      *
      * @param sysMenu 菜单

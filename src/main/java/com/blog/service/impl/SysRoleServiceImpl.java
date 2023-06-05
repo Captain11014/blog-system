@@ -1,12 +1,17 @@
 package com.blog.service.impl;
 
+import com.blog.mapper.SysRoleMenuMapper;
 import com.blog.model.SysRole;
 import com.blog.mapper.SysRoleMapper;
+import com.blog.model.SysRoleMenu;
 import com.blog.service.SysRoleService;
 import com.blog.util.DateUtils;
+import com.blog.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +28,9 @@ public class SysRoleServiceImpl  implements SysRoleService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    private SysRoleMenuMapper sysRoleMenuMapper;
 
     /**
      * 查询角色
@@ -77,10 +85,26 @@ public class SysRoleServiceImpl  implements SysRoleService {
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertSysRole(SysRole sysRole)
     {
         sysRole.setCreateTime(DateUtils.getNowDate());
-        return sysRoleMapper.insertSysRole(sysRole);
+        int i = sysRoleMapper.insertSysRole(sysRole);
+        Long roleId = sysRole.getId();
+        System.out.println("==================================================="+sysRole.getId());
+
+        if(StringUtil.isNotNull(sysRole.getMenuIds()) && sysRole.getMenuIds().length > 0){
+            List<SysRoleMenu> sysRoleMenus = new ArrayList<>();
+            for(Long menuId : sysRole.getMenuIds()){
+                SysRoleMenu sysRoleMenu = new SysRoleMenu();
+                sysRoleMenu.setRoleId(roleId);
+                sysRoleMenu.setMenuId(menuId);
+                sysRoleMenus.add(sysRoleMenu);
+            }
+            i = sysRoleMenuMapper.batchInsert(sysRoleMenus);
+        }
+
+        return i;
     }
 
     /**
@@ -90,10 +114,25 @@ public class SysRoleServiceImpl  implements SysRoleService {
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateSysRole(SysRole sysRole)
     {
         sysRole.setUpdateTime(DateUtils.getNowDate());
-        return sysRoleMapper.updateSysRole(sysRole);
+        int i = sysRoleMapper.updateSysRole(sysRole);
+
+        if(StringUtil.isNotNull(sysRole.getMenuIds()) && sysRole.getMenuIds().length > 0){
+            i = sysRoleMenuMapper.delRoleMenuByRoleId(sysRole.getId());
+            List<SysRoleMenu> sysRoleMenus = new ArrayList<>();
+            for(Long menuId : sysRole.getMenuIds()){
+                SysRoleMenu sysRoleMenu = new SysRoleMenu();
+                sysRoleMenu.setRoleId(sysRole.getId());
+                sysRoleMenu.setMenuId(menuId);
+                sysRoleMenus.add(sysRoleMenu);
+            }
+            i = sysRoleMenuMapper.batchInsert(sysRoleMenus);
+        }
+
+        return i;
     }
 
     /**

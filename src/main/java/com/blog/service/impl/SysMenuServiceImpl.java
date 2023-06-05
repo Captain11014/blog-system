@@ -50,6 +50,40 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     /**
+     * 根据角色id查询菜单列表
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<SysMenu> selectMenuByRoleId(Long roleId) {
+
+        //获取所有菜单列表
+        List<SysMenu> allMenuList = sysMenuMapper.selectSysMenuList(new SysMenu());
+        //获取角色所有的菜单列表
+        List<SysMenu> roleMenuList = sysMenuMapper.selectMenuByRoleId(roleId);
+
+        for(SysMenu sysMenu : allMenuList){
+            for(SysMenu menu : roleMenuList){
+                if(sysMenu.getId().longValue() == menu.getId().longValue()){
+                    sysMenu.setSelect(true);
+                    break;
+                }
+            }
+        }
+        return buildMenuTree(allMenuList);
+    }
+
+    /**
+     * 根据角色id获取该角色所拥有的菜单列表
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<SysMenu> getMenuByRoleId(Long roleId) {
+        return buildMenuTree(sysMenuMapper.selectMenuByRoleId(roleId));
+    }
+
+    /**
      * 新增菜单
      *
      * @param sysMenu 菜单
