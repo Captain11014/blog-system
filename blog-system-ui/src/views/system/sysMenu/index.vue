@@ -314,7 +314,7 @@ export default {
       // 是否显示弹出层
       open: false,
       // 是否展开，默认全部折叠
-      isExpandAll: false,
+      isExpandAll: true,
       // 重新渲染表格状态
       refreshTable: true,
       // 查询参数
@@ -366,6 +366,9 @@ export default {
       iconList: [
         {
           class: "el-icon-s-tools"
+        },
+        {
+          class: "table"
         },
         {
           class: "el-icon-s-custom"

@@ -1,6 +1,7 @@
 package com.blog.mapper;
 
 import com.blog.model.SysMenu;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -69,5 +70,12 @@ public interface SysMenuMapper{
      * @return 结果
      */
     public int deleteSysMenuByIds(Long[] ids);
+
+    /**
+     * 根据用户Id查询菜单列表
+     * @param userId
+     * @return
+     */
+    public List<SysMenu> findUserMenuListByUserId(@Param("userId") Long userId);
 
 }

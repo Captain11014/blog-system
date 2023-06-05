@@ -39,8 +39,9 @@
       <if test="perms != null  and perms != ''"> and perms = #{perms}</if>
       <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
       <if test="sortValue != null "> and sort_value = #{sortValue}</if>
-      <if test="status != null "> and status = #{status}</if>
+      <if test="status != null and status != ''"> and status = #{status}</if>
     </where>
+    order by sort_value asc
   </select>
 
   <select id="selectSysMenuById" parameterType="Long" resultMap="SysMenuResult">
@@ -114,5 +115,20 @@
       #{id}
     </foreach>
   </delete>
+
+
+  <select id="findUserMenuListByUserId" resultMap="SysMenuResult">
+    select
+    distinct m.id,m.parent_id,m.name,m.type,m.path,m.component,m.perms,m.icon,m.sort_value,m.status,m.create_time,m.update_time,m.del_flag
+    from sys_menu m
+    inner join sys_role_menu rm on rm.menu_id = m.id
+    inner join sys_user_role ur on ur.role_id = rm.role_id
+    where
+    ur.user_id = #{userId}
+    and m.status = 1
+    and rm.is_deleted = 0
+    and ur.is_deleted = 0
+    and m.is_deleted = 0
+  </select>
 
 </mapper>

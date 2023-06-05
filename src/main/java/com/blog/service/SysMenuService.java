@@ -1,5 +1,6 @@
 package com.blog.service;
 
+import com.blog.model.RouterVo;
 import com.blog.model.SysMenu;
 
 import java.util.List;
@@ -84,5 +85,19 @@ public interface SysMenuService {
      * @return
      */
     public List<SysMenu> buildMenuTree(List<SysMenu> menus);
+
+
+    /**
+     * 查询数据库动态构建路由结构，进行显示
+     * @return
+     */
+    List<RouterVo> findUserMenuListByUserId(Long userId);
+
+    /**
+     * 根据用户id获取用户可操作按钮列表
+     * @param userId
+     * @return
+     */
+    List<String> findMenuPermsByUserId(Long userId);
 
 }

@@ -77,74 +77,74 @@ export const constantRoutes = [
   //   ]
   // },
 
-  {
-    path: '/system',
-    component: Layout,
-    children: [
-      {
-        path: 'role',
-        name: '角色管理',
-        component: () => import('@/views/system/role/index'),
-        meta: { title: '角色管理', icon: 'table' }
-      },
-    ]
-  },
-  {
-    path: '/system/sysUser',
-    component: Layout,
-    children: [
-      {
-        path: '',
-        name: '用户管理',
-        component: () => import('@/views/system/sysUser/index'),
-        meta: { title: '用户管理', icon: 'table' }
-      },
-    ]
-  },
-  {
-    path: '/system/sysMenu',
-    component: Layout,
-    children: [
-      {
-        path: '',
-        name: '菜单管理',
-        component: () => import('@/views/system/sysMenu/index'),
-        meta: { title: '菜单管理', icon: 'table' }
-      },
-    ]
-  },
+  // {
+  //   path: '/system',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'role',
+  //       name: '角色管理',
+  //       component: () => import('@/views/system/role/index'),
+  //       meta: { title: '角色管理', icon: 'table' }
+  //     },
+  //   ]
+  // },
+  // {
+  //   path: '/system/sysUser',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: '用户管理',
+  //       component: () => import('@/views/system/sysUser/index'),
+  //       meta: { title: '用户管理', icon: 'table' }
+  //     },
+  //   ]
+  // },
+  // {
+  //   path: '/system/sysMenu',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: '菜单管理',
+  //       component: () => import('@/views/system/sysMenu/index'),
+  //       meta: { title: '菜单管理', icon: 'table' }
+  //     },
+  //   ]
+  // },
 
-  {
-    path: '/system/doAssignRole',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '',
-        name: '分配角色',
-        component: () => import('@/views/system/sysUser/doAssignRole'),
-        meta: { title: '分配角色',activeMenu:'/system/sysUser' }
-      },
-    ]
-  },
+  // {
+  //   path: '/system/doAssignRole',
+  //   component: Layout,
+  //   hidden: true,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: '分配角色',
+  //       component: () => import('@/views/system/sysUser/doAssignRole'),
+  //       meta: { title: '分配角色',activeMenu:'/system/sysUser' }
+  //     },
+  //   ]
+  // },
 
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
+  // {
+  //   path: '/form',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Form',
+  //       component: () => import('@/views/form/index'),
+  //       meta: { title: 'Form', icon: 'form' }
+  //     }
+  //   ]
+  // },
 
  
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({

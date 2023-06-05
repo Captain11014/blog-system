@@ -23,6 +23,13 @@ public interface SysUserService {
     public SysUser selectSysUserById(Long id);
 
     /**
+     * 根据用户名查询用户
+     * @param username
+     * @return
+     */
+    public SysUser selectSysUserByUsername(String username);
+
+    /**
      * 查询用户列表
      *
      * @param sysUser 用户

@@ -20,6 +20,8 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree }  from "@/utils/blog"
+//新增
+import hasBtnPermission from '@/utils/btn-permission'
 
 /**
  * If you don't want to use mock-server
@@ -36,6 +38,7 @@ if (process.env.NODE_ENV === 'production') {
 
 Vue.prototype.resetForm = resetForm
 Vue.prototype.parseTime = parseTime
+Vue.prototype.$hasBP = hasBtnPermission
 
 
 Vue.component('Pagination', Pagination)

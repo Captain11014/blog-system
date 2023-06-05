@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { getToken, removeToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -54,17 +54,21 @@ service.interceptors.response.use(
       })
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      if (res.code === 403 || res.code === 50012 || res.code === 50014) {
+        // removeToken();
         // to re-login
         MessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          store.dispatch('LogOut').then(() => {
-            // location.reload()
-            location.href = '/index'
+          store.dispatch('user/resetToken').then(() => {
+            location.reload()
           })
+          // store.dispatch('LogOut').then(() => {
+          //   // location.reload()
+          //   // location.href = '/index';
+          // })
         })
       }
       return Promise.reject('无效的会话，或者会话已过期，请重新登录。')

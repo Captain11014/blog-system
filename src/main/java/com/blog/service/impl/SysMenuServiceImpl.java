@@ -1,15 +1,21 @@
 package com.blog.service.impl;
 
+import com.blog.model.Constant;
+import com.blog.model.MetaVo;
+import com.blog.model.RouterVo;
 import com.blog.model.SysMenu;
 import com.blog.mapper.SysMenuMapper;
 import com.blog.service.SysMenuService;
 import com.blog.util.DateUtils;
+import com.blog.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -153,6 +159,59 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     /**
+     * 查询数据库动态构建路由结构，进行显示
+     * @return
+     */
+    @Override
+    public List<RouterVo> findUserMenuListByUserId(Long userId) {
+
+        List<SysMenu> sysMenus = null;
+
+        if(userId == Constant.USER_ADMIN){
+            //如果是管理员，查询所有菜单列表
+            SysMenu sysMenu = new SysMenu();
+            sysMenu.setStatus(Constant.MENU_STATUS_TRUE);
+            sysMenus = sysMenuMapper.selectSysMenuList(sysMenu);
+        }else{
+            //2.如果不是管理员，根据userId查询可操作菜单列表
+            //多表关联查询：用户角色关系表、角色菜单关系表、菜单表
+            sysMenus = sysMenuMapper.findUserMenuListByUserId(userId);
+        }
+
+        //把查询出来数据列表构建成框架要求的路由数据结构
+        List<SysMenu> sysMenuTreeList = buildMenuTree(sysMenus);
+        List<RouterVo> routerVoList = this.buildRouter(sysMenuTreeList);
+
+        return routerVoList;
+    }
+
+    /**
+     * 根据用户id获取用户可操作按钮列表
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<String> findMenuPermsByUserId(Long userId) {
+
+        List<SysMenu> sysMenus = null;
+
+        if(userId == Constant.USER_ADMIN){
+            //如果是管理员，查询所有菜单列表
+            SysMenu sysMenu = new SysMenu();
+            sysMenu.setStatus(Constant.MENU_STATUS_TRUE);
+            sysMenus = sysMenuMapper.selectSysMenuList(sysMenu);
+        }else{
+            //2.如果不是管理员，根据userId查询可操作菜单列表
+            //多表关联查询：用户角色关系表、角色菜单关系表、菜单表
+            sysMenus = sysMenuMapper.findUserMenuListByUserId(userId);
+        }
+
+        List<String> permsList = sysMenus.stream().filter(item -> item.getType() == 2).map(item -> item.getPerms()).collect(Collectors.toList());
+
+        return permsList;
+    }
+
+    /**
      * 递归列表
      * 查找子节点
      * @param list
@@ -169,6 +228,66 @@ public class SysMenuServiceImpl implements SysMenuService {
             }
         }
         return menu;
+    }
+
+
+    /**
+     * 构建前端路由所以需要的结构
+     * @param menus
+     * @return
+     */
+    private List<RouterVo> buildRouter(List<SysMenu> menus) {
+
+        List<RouterVo> routers = new ArrayList<>();
+
+        for (SysMenu menu : menus) {
+            RouterVo router = new RouterVo();
+            router.setHidden(false);
+            router.setAlwaysShow(false);
+            router.setPath(getRouterPath(menu));
+            router.setComponent(menu.getComponent());
+            router.setMeta(new MetaVo(menu.getName(), menu.getIcon()));
+            //下一层数据部分
+            List<SysMenu> children = menu.getChildren();
+            if(menu.getType().intValue() == 1) {
+                //加载隐藏路由
+                List<SysMenu> hiddenMenuList = children.stream().filter(item -> !StringUtil.isEmpty(item.getComponent())).collect(Collectors.toList());
+                for (SysMenu hiddenMenu : hiddenMenuList) {
+                    RouterVo hiddenRouter = new RouterVo();
+                    hiddenRouter.setHidden(true);
+                    hiddenRouter.setAlwaysShow(false);
+                    hiddenRouter.setPath(getRouterPath(hiddenMenu));
+                    hiddenRouter.setComponent(hiddenMenu.getComponent());
+                    hiddenRouter.setMeta(new MetaVo(hiddenMenu.getName(), hiddenMenu.getIcon()));
+                    routers.add(hiddenRouter);
+                }
+            } else {
+                if (!CollectionUtils.isEmpty(children)) {
+                    if(children.size() > 0) {
+                        router.setAlwaysShow(true);
+                    }
+                    router.setChildren(buildRouter(children));
+                }
+            }
+            routers.add(router);
+
+        }
+
+        return routers;
+    }
+
+    /**
+     * 获取路由地址
+     *
+     * @param menu 菜单信息
+     * @return 路由地址
+     */
+    public String getRouterPath(SysMenu menu) {
+        String routerPath = "/" + menu.getPath();
+        if(menu.getParentId().intValue() != 0) {
+            routerPath = menu.getPath();
+        }
+        return routerPath;
     }
 
 }

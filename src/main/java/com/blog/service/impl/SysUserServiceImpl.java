@@ -7,6 +7,7 @@ import com.blog.model.SysUserRole;
 import com.blog.service.SysUserRoleService;
 import com.blog.service.SysUserService;
 import com.blog.util.DateUtils;
+import com.blog.util.MD5;
 import com.blog.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,16 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     /**
+     * 根据用户名查询用户
+     * @param username
+     * @return
+     */
+    @Override
+    public SysUser selectSysUserByUsername(String username) {
+        return sysUserMapper.selectSysUserByUsername(username);
+    }
+
+    /**
      * 查询用户列表
      *
      * @param sysUser 用户
@@ -67,6 +78,9 @@ public class SysUserServiceImpl implements SysUserService {
     public int insertSysUser(SysUser sysUser)
     {
         sysUser.setCreateTime(DateUtils.getNowDate());
+        if(StringUtil.isNotEmpty(sysUser.getPassword())){
+            sysUser.setPassword(MD5.encrypt(sysUser.getPassword()));
+        }
         return sysUserMapper.insertSysUser(sysUser);
     }
 
@@ -80,6 +94,9 @@ public class SysUserServiceImpl implements SysUserService {
     public int updateSysUser(SysUser sysUser)
     {
         sysUser.setUpdateTime(DateUtils.getNowDate());
+        if(StringUtil.isNotEmpty(sysUser.getPassword())){
+            sysUser.setPassword(MD5.encrypt(sysUser.getPassword()));
+        }
         return sysUserMapper.updateSysUser(sysUser);
     }
 
