@@ -40,10 +40,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="手机" prop="phone">
+      <el-form-item label="邮箱" prop="email">
         <el-input
-          v-model="queryParams.phone"
-          placeholder="请输入手机"
+          v-model="queryParams.email"
+          placeholder="请输入邮箱"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -92,7 +92,7 @@
         </template>
       </el-table-column>-->
       <el-table-column label="昵称" align="center" prop="nickname" />
-      <el-table-column label="手机" align="center" prop="phone" />
+      <el-table-column label="邮箱" align="center" prop="email" />
       <!-- <el-table-column label="头像地址" align="center" prop="headUrl" />
       <el-table-column label="微信openId" align="center" prop="openId" />-->
       <!-- <el-table-column label="描述" align="center" prop="description" /> -->
@@ -150,8 +150,8 @@
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="form.nickname" placeholder="请输入昵称" />
         </el-form-item>
-        <el-form-item label="手机" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入手机" />
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="form.email" placeholder="请输入手机" />
         </el-form-item>
         <!-- <el-form-item label="头像地址" prop="headUrl">
           <el-input v-model="form.headUrl" placeholder="请输入头像地址" />
@@ -216,7 +216,7 @@ export default {
         password: null,
         birthday: null,
         nickname: null,
-        phone: null,
+        email: null,
         headUrl: null,
         openId: null,
         description: null,
@@ -268,7 +268,7 @@ export default {
         password: null,
         birthday: null,
         nickname: null,
-        phone: null,
+        email: null,
         headUrl: null,
         openId: null,
         description: null,

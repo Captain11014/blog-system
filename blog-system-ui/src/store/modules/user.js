@@ -8,7 +8,7 @@ const getDefaultState = () => {
     name: '',
     avatar: '',
     buttons: [], // 新增
-    menus: '' //新增
+    menus: '', //新增
   }
 }
 
@@ -67,7 +67,6 @@ const actions = {
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
-
         commit("SET_BUTTONS", data.buttons)
         commit("SET_MENUS", data.routers)
         resolve(data)

@@ -1,61 +1,170 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.blog.mapper.ArticleMapper" >
-  <resultMap id="BaseResultMap" type="com.blog.model.Article" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="user_id" property="userId" jdbcType="BIGINT" />
-    <result column="status" property="status" jdbcType="CHAR" />
-    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
-    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+
+  <resultMap type="Article" id="ArticleResult">
+    <result property="id"    column="id"    />
+    <result property="title"    column="title"    />
+    <result property="content"    column="content"    />
+    <result property="userId"    column="user_id"    />
+    <result property="status"    column="status"    />
+    <result property="auditTime"    column="audit_time"    />
+    <result property="auditUserId"    column="audit_user_id"    />
+    <result property="delFlag"    column="del_flag"    />
+    <result property="createBy"    column="create_by"    />
+    <result property="createTime"    column="create_time"    />
+    <result property="updateBy"    column="update_by"    />
+    <result property="updateTime"    column="update_time"    />
+    <result property="remark"    column="remark"    />
+    <association property="user" column="user_id" javaType="SysUser">
+      <result property="id"    column="user_id"    />
+      <result property="username"    column="username"    />
+      <result property="nickname"    column="nickname"    />
+    </association>
+    <association property="auditUser" column="audit_user_id" javaType="SysUser" >
+      <result property="id"    column="audit_user_id"    />
+      <result property="username"    column="audit_username"    />
+      <result property="nickname"    column="audit_nickname"    />
+    </association>
   </resultMap>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from article
-    where id = #{id,jdbcType=BIGINT}
+
+  <resultMap type="SysUser" id="SysUserResult">
+    <result property="id"    column="id"    />
+    <result property="username"    column="username"    />
+    <result property="password"    column="password"    />
+    <result property="birthday"    column="birthday"    />
+    <result property="nickname"    column="nickname"    />
+    <result property="email"    column="email"    />
+    <result property="headUrl"    column="head_url"    />
+    <result property="openId"    column="open_id"    />
+    <result property="description"    column="description"    />
+    <result property="status"    column="status"    />
+    <result property="createTime"    column="create_time"    />
+    <result property="updateTime"    column="update_time"    />
+    <result property="remark"    column="remark"    />
+    <result property="delFlag"    column="del_flag"    />
+  </resultMap>
+
+  <sql id="selectArticleVo">
+    select id, title, content, user_id, status, audit_time, audit_user_id, del_flag, create_by, create_time, update_by, update_time, remark from article
+  </sql>
+
+<!--  连表查询sql-->
+  <sql id="selectArticleVo1">
+    SELECT
+      a.id,
+      a.title,
+      a.content,
+      a.user_id,
+      a.STATUS,
+      a.audit_time,
+      a.audit_user_id,
+      a.del_flag,
+      a.create_by,
+      a.create_time,
+      a.update_by,
+      a.update_time,
+      a.remark,
+      u.username,u.nickname,
+      u2.username as audit_username,u2.nickname as audit_nickname
+    FROM
+      article a
+        LEFT JOIN sys_user u ON a.user_id = u.id
+        LEFT JOIN sys_user u2 ON a.audit_user_id = u2.id
+  </sql>
+
+
+  <select id="selectArticleList" parameterType="Article" resultMap="ArticleResult">
+    <include refid="selectArticleVo"/>
+    <where>
+      del_flag = '0'
+      <if test="title != null  and title != ''"> and title = #{title}</if>
+      <if test="content != null  and content != ''"> and content = #{content}</if>
+      <if test="userId != null "> and user_id = #{userId}</if>
+      <if test="status != null  and status != ''"> and status = #{status}</if>
+      <if test="auditTime != null "> and audit_time = #{auditTime}</if>
+      <if test="auditUserId != null "> and audit_user_id = #{auditUserId}</if>
+    </where>
+  </select>
+
+  <select id="selectArticleJoinList" parameterType="Article" resultMap="ArticleResult">
+    <include refid="selectArticleVo1"/>
+    <where>
+      a.del_flag = '0'
+      <if test="title != null  and title != ''"> and a.title like concat('%',#{title},'%')</if>
+      <if test="content != null  and content != ''"> and a.content = #{content}</if>
+      <if test="userId != null "> and a.user_id = #{userId}</if>
+      <if test="status != null  and status != ''"> and a.status = #{status}</if>
+      <if test="auditTime != null "> and a.audit_time = #{auditTime}</if>
+      <if test="auditUserId != null "> and a.audit_user_id = #{auditUserId}</if>
+    </where>
+  </select>
+
+  <select id="selectArticleById" parameterType="Long" resultMap="ArticleResult">
+    <include refid="selectArticleVo"/>
+    where id = #{id} and del_flag = '0'
+  </select>
+
+  <insert id="insertArticle" parameterType="Article" useGeneratedKeys="true" keyProperty="id">
+    insert into article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">title,</if>
+      <if test="content != null">content,</if>
+      <if test="userId != null">user_id,</if>
+      <if test="status != null">status,</if>
+      <if test="auditTime != null">audit_time,</if>
+      <if test="auditUserId != null">audit_user_id,</if>
+      <if test="delFlag != null">del_flag,</if>
+      <if test="createBy != null">create_by,</if>
+      <if test="createTime != null">create_time,</if>
+      <if test="updateBy != null">update_by,</if>
+      <if test="updateTime != null">update_time,</if>
+      <if test="remark != null">remark,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null">#{title},</if>
+      <if test="content != null">#{content},</if>
+      <if test="userId != null">#{userId},</if>
+      <if test="status != null">#{status},</if>
+      <if test="auditTime != null">#{auditTime},</if>
+      <if test="auditUserId != null">#{auditUserId},</if>
+      <if test="delFlag != null">#{delFlag},</if>
+      <if test="createBy != null">#{createBy},</if>
+      <if test="createTime != null">#{createTime},</if>
+      <if test="updateBy != null">#{updateBy},</if>
+      <if test="updateTime != null">#{updateTime},</if>
+      <if test="remark != null">#{remark},</if>
+    </trim>
+  </insert>
+
+  <update id="updateArticle" parameterType="Article">
+    update article
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="title != null">title = #{title},</if>
+      <if test="content != null">content = #{content},</if>
+      <if test="userId != null">user_id = #{userId},</if>
+      <if test="status != null">status = #{status},</if>
+      <if test="auditTime != null">audit_time = #{auditTime},</if>
+      <if test="auditUserId != null">audit_user_id = #{auditUserId},</if>
+      <if test="delFlag != null">del_flag = #{delFlag},</if>
+      <if test="createBy != null">create_by = #{createBy},</if>
+      <if test="createTime != null">create_time = #{createTime},</if>
+      <if test="updateBy != null">update_by = #{updateBy},</if>
+      <if test="updateTime != null">update_time = #{updateTime},</if>
+      <if test="remark != null">remark = #{remark},</if>
+    </trim>
+    where id = #{id}
+  </update>
+
+  <delete id="deleteArticleById" parameterType="Long">
+    update article set del_flag = '2' where id = #{id}
   </delete>
 
-  <insert id="insert" parameterType="com.blog.model.Article" >
-    insert into article (id, title, user_id,
-      status, del_flag, create_by, 
-      create_time, update_by, update_time, 
-      remark, content)
-    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, 
-      #{status,jdbcType=CHAR}, #{delFlag,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{remark,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
-  </insert>
-  <update id="updateByPrimaryKey" parameterType="com.blog.model.Article" >
-
-    update article
-    set title = #{title,jdbcType=VARCHAR},
-      user_id = #{userId,jdbcType=BIGINT},
-      status = #{status,jdbcType=CHAR},
-      del_flag = #{delFlag,jdbcType=CHAR},
-      create_by = #{createBy,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_by = #{updateBy,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      remark = #{remark,jdbcType=VARCHAR},
-      content = #{content,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=BIGINT}
+  <update id="deleteArticleByIds" parameterType="String">
+    update article set del_flag = '2' where id in
+    <foreach item="id" collection="array" open="(" separator="," close=")">
+      #{id}
+    </foreach>
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-
-    select id, title, user_id, status, del_flag, create_by, create_time, update_by, update_time, 
-    remark, content
-    from article
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-
-    select id, title, user_id, status, del_flag, create_by, create_time, update_by, update_time, 
-    remark, content
-    from article
-  </select>
 </mapper>

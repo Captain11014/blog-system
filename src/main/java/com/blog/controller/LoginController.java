@@ -44,10 +44,13 @@ public class LoginController extends BaseController {
     public AjaxResult login(@RequestBody LoginUser loginUser) {
 
         SysUser sysUser = sysUserService.selectSysUserByUsername(loginUser.getUsername());
+
+        //判断账号密码
         if(StringUtil.isNull(sysUser) || !MD5.validate(sysUser.getPassword(),loginUser.getPassword())){
             throw new BlogEcxeption(HttpStatus.UNAUTHORIZED,"账号或密码错误");
         }
 
+        //判断账号是否已停用
         if(sysUser.getStatus().equals(Constant.USER_STATUS_FALSE)){
             throw new BlogEcxeption(HttpStatus.UNAUTHORIZED,"账号已经停用，请联系管理员");
         }
@@ -79,9 +82,9 @@ public class LoginController extends BaseController {
         List<String> permsList = sysMenuService.findMenuPermsByUserId(userId);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("roles","[admin]");
-        map.put("name",sysUser.getNickname());
+        map.put("name",sysUser.getUsername());
         map.put("avatar","https://oss.aliyuncs.com/aliyun_id_photo_bucket/default_handsome.jpg");
+        map.put("sysUser",sysUser);
         map.put("buttons", permsList);
         map.put("routers", routerVos);
         return success(map);

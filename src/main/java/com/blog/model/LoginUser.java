@@ -38,7 +38,7 @@ public class LoginUser extends BaseEntity {
     /**
      * 手机
      */
-    private String phone;
+    private String email;
 
     /**
      * 头像地址

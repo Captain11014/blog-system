@@ -1,5 +1,6 @@
 package com.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,6 +54,7 @@ public class Article extends BaseEntity{
     /**
      * 审核时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date auditTime;
 
     /**
@@ -64,6 +66,16 @@ public class Article extends BaseEntity{
      * 删除标志（0代表存在 2代表删除）
      */
     private String delFlag;
+
+    /**
+     * 用户信息（博客作者）
+     */
+    private SysUser user;
+
+    /**
+     * 审核员信息
+     */
+    private SysUser auditUser;
 
 
 }

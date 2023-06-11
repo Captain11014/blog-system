@@ -51,6 +51,11 @@ public class Constant {
      */
     public static final String MENU_STATUS_TRUE = "1";
 
+    /**
+     * 资源映射路径 前缀
+     */
+    public static final String RESOURCE_PREFIX = "/profile";
+
 
 
 }

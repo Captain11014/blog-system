@@ -5,8 +5,8 @@ const getters = {
   avatar: state => state.user.avatar,
   name: state => state.user.name,
 
-   //新增
-   buttons: state => state.user.buttons,
-   menus: state => state.user.menus
+  //新增
+  buttons: state => state.user.buttons,
+  menus: state => state.user.menus
 }
 export default getters

@@ -28,16 +28,24 @@
         </property>
     </bean>
 
+
+
     <!--配置默认的servlet处理静态资源-->
     <mvc:default-servlet-handler />
 
+
+<!--    D:\studyCode\upload-->
+
     <!--开启mvc的注解驱动-->
     <mvc:annotation-driven />
+    <mvc:resources mapping="/profile/**" location="file:D:/studyCode/upload/"/>
+
 
     <!--配置视图控制器-->
 <!--    <mvc:view-controller path="/" view-name="index"></mvc:view-controller>-->
 
     <!--配置文件上传解析器-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+
 
 </beans>

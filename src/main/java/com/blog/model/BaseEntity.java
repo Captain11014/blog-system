@@ -2,6 +2,8 @@ package com.blog.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,15 +11,14 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author 姓陈的
  * 2023/5/23 16:13
  */
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-@ToString
 public class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +45,7 @@ public class BaseEntity implements Serializable {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
 
     /**
      * 备注

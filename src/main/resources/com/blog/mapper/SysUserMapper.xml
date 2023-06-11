@@ -8,7 +8,7 @@
     <result property="password"    column="password"    />
     <result property="birthday"    column="birthday"    />
     <result property="nickname"    column="nickname"    />
-    <result property="phone"    column="phone"    />
+    <result property="email"    column="email"    />
     <result property="headUrl"    column="head_url"    />
     <result property="openId"    column="open_id"    />
     <result property="description"    column="description"    />
@@ -20,7 +20,7 @@
   </resultMap>
 
   <sql id="selectSysUserVo">
-    select id, username, password, birthday, nickname, phone, head_url, open_id, description, status, create_time, update_time, remark, del_flag from sys_user
+    select id, username, password, birthday, nickname, email, head_url, open_id, description, status, create_time, update_time, remark, del_flag from sys_user
   </sql>
 
   <select id="selectSysUserList" parameterType="SysUser" resultMap="SysUserResult">
@@ -31,7 +31,7 @@
       <if test="password != null  and password != ''"> and password = #{password}</if>
       <if test="birthday != null"> and birthday = #{birthday}</if>
       <if test="nickname != null  and nickname != ''"> and nickname like concat('%', #{nickname}, '%')</if>
-      <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+      <if test="email != null  and email != ''"> and email = #{email}</if>
       <if test="headUrl != null  and headUrl != ''"> and head_url = #{headUrl}</if>
       <if test="openId != null  and openId != ''"> and open_id = #{openId}</if>
       <if test="description != null  and description != ''"> and description = #{description}</if>
@@ -56,7 +56,7 @@
       <if test="password != null and password != ''">password,</if>
       <if test="birthday != null">birthday,</if>
       <if test="nickname != null">nickname,</if>
-      <if test="phone != null">phone,</if>
+      <if test="email != null">email,</if>
       <if test="headUrl != null">head_url,</if>
       <if test="openId != null">open_id,</if>
       <if test="description != null">description,</if>
@@ -71,7 +71,7 @@
       <if test="password != null and password != ''">#{password},</if>
       <if test="birthday != null">#{birthday},</if>
       <if test="nickname != null">#{nickname},</if>
-      <if test="phone != null">#{phone},</if>
+      <if test="email != null">#{email},</if>
       <if test="headUrl != null">#{headUrl},</if>
       <if test="openId != null">#{openId},</if>
       <if test="description != null">#{description},</if>
@@ -90,7 +90,7 @@
       <if test="password != null and password != ''">password = #{password},</if>
       <if test="birthday != null">birthday = #{birthday},</if>
       <if test="nickname != null">nickname = #{nickname},</if>
-      <if test="phone != null">phone = #{phone},</if>
+      <if test="email != null">email = #{email},</if>
       <if test="headUrl != null">head_url = #{headUrl},</if>
       <if test="openId != null">open_id = #{openId},</if>
       <if test="description != null">description = #{description},</if>

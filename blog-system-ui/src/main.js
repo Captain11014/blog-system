@@ -19,6 +19,10 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+
+// 富文本组件
+import Editor from "@/components/Editor"
+
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree }  from "@/utils/blog"
 //新增
 import hasBtnPermission from '@/utils/btn-permission'
@@ -40,8 +44,9 @@ Vue.prototype.resetForm = resetForm
 Vue.prototype.parseTime = parseTime
 Vue.prototype.$hasBP = hasBtnPermission
 
-
+//全局挂载主键
 Vue.component('Pagination', Pagination)
+Vue.component('Editor', Editor)
 
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
