@@ -7,20 +7,24 @@ import 'nprogress/nprogress.css' // 水平进度条样式
 import getPageTitle from '@/utils/get-page-title' // 获取应用头部标题的函数
 import Layout from '@/layout'
 import ParentView from '@/components/ParentView'
-const _import = require('./router/_import_'+process.env.NODE_ENV) // 获取组件的方法
+const _import = require('./router/_import_' + process.env.NODE_ENV) // 获取组件的方法
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
-const whiteList = ['/login'] // no redirect whitelist
-router.beforeEach(async(to, from, next) => {
+const whiteList = ['/', '/login/admin', '/login/pt', '/register'] // no redirect whitelist
+router.beforeEach(async (to, from, next) => {
   NProgress.start()
-// set page title
+  // set page title
   document.title = getPageTitle(to.meta.title)
-// determine whether the user has logged in
+  // determine whether the user has logged in
   const hasToken = getToken()
   if (hasToken) {
-    if (to.path === '/login') {
+    if (to.path === '/login/pt') {
       // if is logged in, redirect to the home page
       next({ path: '/' })
+      NProgress.done()
+    } else if (to.path === '/login/admin') {
+      // if is logged in, redirect to the home page
+      next({ path: '/admin/index' })
       NProgress.done()
     } else {
       const hasGetUserInfo = store.getters.name

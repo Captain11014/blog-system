@@ -32,8 +32,22 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/login',
+    path: '/login/admin',
     component: () => import('@/views/login/admin_index'),
+    hidden: true
+  },
+
+  //普通用户登录
+  {
+    path: '/login/pt',
+    component: () => import('@/views/ordinaryuser/login'),
+    hidden: true
+  },
+
+   //普通用户登录
+   {
+    path: '/register',
+    component: () => import('@/views/ordinaryuser/register/index'),
     hidden: true
   },
 
@@ -45,10 +59,15 @@ export const constantRoutes = [
 
   {
     path: '/',
+    component: () => import('@/views/index'),
+    hidden:true
+  },
+
+  {
+    path: '/admin',
     component: Layout,
-    redirect: '/dashboard',
     children: [{
-      path: 'dashboard',
+      path: 'index',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }

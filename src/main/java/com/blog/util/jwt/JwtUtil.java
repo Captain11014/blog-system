@@ -14,7 +14,7 @@ import java.util.UUID;
 public class JwtUtil {
 
 
-    private static long tokenExpiration = 365 * 24 * 60 * 60 * 1000;
+    private static long tokenExpiration = 365 * 24 * 60 * 60 * 10000;
     private static String tokenSignKey = "@sdfhsbhj57b$#hbhs_sajsb";
 
     public static String createToken(Long userId, String username) {

@@ -30,6 +30,7 @@ import java.util.Date;
 @RequestMapping("/common")
 public class CommonController {
 
+    //win磁盘目录
     public static final String uploadPathStr = "D:/studyCode/upload";
 
     @Autowired
@@ -51,10 +52,12 @@ public class CommonController {
         //生成新文件名，避免重名
         String newFileName = UUID.randomUUID(true)+fileName;
 
+        //文件的映射路径
+        String path = Constant.RESOURCE_PREFIX+"/"+datePath+"/"+newFileName;
 
         AjaxResult ajax = AjaxResult.success();
-        ajax.put("url", url+ Constant.RESOURCE_PREFIX+"/"+datePath+"/"+newFileName);
-        ajax.put("fileName", Constant.RESOURCE_PREFIX+"/"+datePath+"/"+newFileName);
+        ajax.put("url", url+ path);
+        ajax.put("fileName", path);
         ajax.put("newFileName", newFileName);
         ajax.put("originalFilename", file.getOriginalFilename());
 

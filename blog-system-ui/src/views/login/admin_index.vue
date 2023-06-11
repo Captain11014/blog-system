@@ -54,6 +54,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { getToken, removeToken } from '@/utils/auth'
 
 export default {
   name: 'Login',
@@ -108,9 +109,10 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+          this.$store.dispatch('user/resetToken')
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+            this.$router.push({ path:'/admin/index' })
             this.loading = false
           }).catch(() => {
             this.loading = false
