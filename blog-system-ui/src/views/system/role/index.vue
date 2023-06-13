@@ -101,6 +101,7 @@
             icon="el-icon-aim"
           >分配用户</el-button>-->
           <el-button
+            v-if="scope.row.id != 1 && scope.row.id != 2 && scope.row.id != 3"
             size="mini"
             type="text"
             icon="el-icon-delete"

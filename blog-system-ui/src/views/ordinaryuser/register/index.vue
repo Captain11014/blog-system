@@ -8,6 +8,7 @@
       label-width="100px"
       class="demo-ruleForm"
     >
+      <h2 class="head-title">用户注册</h2>
       <el-form-item prop="username" label="用户名">
         <el-input v-model="form.username"></el-input>
       </el-form-item>
@@ -163,5 +164,16 @@ export default {
   padding: 100px 30px;
   border-radius: 5%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+}
+
+.head-title{
+  width: 30%;
+  display: block;
+  text-align: center;
+  // border: 1px solid red;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left:-15%;
 }
 </style>

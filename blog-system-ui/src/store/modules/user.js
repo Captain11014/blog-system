@@ -63,8 +63,9 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
-
+        const { name } = data
+        const avatar = (data.headUrl == "" || data.headUrl == null)?"https://oss.aliyuncs.com/aliyun_id_photo_bucket/default_handsome.jpg": process.env.VUE_APP_BASE_API + data.headUrl;
+        // const avatar = "https://oss.aliyuncs.com/aliyun_id_photo_bucket/default_handsome.jpg";
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit("SET_BUTTONS", data.buttons)

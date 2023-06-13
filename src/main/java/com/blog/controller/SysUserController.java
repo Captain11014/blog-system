@@ -56,6 +56,16 @@ public class SysUserController extends BaseController {
     }
 
     /**
+     * 根据用户名查询用户信息
+     * @param username
+     * @return
+     */
+    @GetMapping("/selectSysUserByUsername/{username}")
+    public AjaxResult selectSysUserByUsername(@PathVariable String username){
+        return success(sysUserService.selectSysUserByUsername(username));
+    }
+
+    /**
      * 新增用户
      */
     @PostMapping

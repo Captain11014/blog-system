@@ -65,7 +65,9 @@ router.beforeEach(async (to, from, next) => {
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
-      next(`/login?redirect=${to.path}`)
+      //其他没有访问权限的页面被重定向到登录页面。
+      // next(`/login?redirect=${to.path}`)
+      next(`/`)
       NProgress.done()
     }
   }

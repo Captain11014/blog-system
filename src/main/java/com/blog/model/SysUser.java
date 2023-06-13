@@ -63,10 +63,6 @@ public class SysUser extends BaseEntity{
      */
     private String headUrl;
 
-    /**
-     * 微信openId
-     */
-    private String openId;
 
     /**
      * 描述

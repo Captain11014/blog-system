@@ -83,7 +83,7 @@ public class LoginController extends BaseController {
 
         Map<String, Object> map = new HashMap<>();
         map.put("name",sysUser.getUsername());
-        map.put("avatar","https://oss.aliyuncs.com/aliyun_id_photo_bucket/default_handsome.jpg");
+        map.put("avatar",sysUser.getHeadUrl());
         map.put("sysUser",sysUser);
         map.put("buttons", permsList);
         map.put("routers", routerVos);

@@ -74,11 +74,19 @@ export const constantRoutes = [
     }]
   },
 
+  //前往文章详情页
   {
     path: '/articleDetail',
     component: () => import('@/views/blogs/article/articleDetail'),
     hidden: true
   },
+
+  //前往个人中心
+  {
+    path:'/personalcenter',
+    component:() => import('@/views/ordinaryuser/personalcenter/index'),
+    hidden:true
+  }
 
   // {
   //   path: '/example',

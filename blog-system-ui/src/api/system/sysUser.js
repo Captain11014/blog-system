@@ -17,6 +17,15 @@ export function getUser(id) {
   })
 }
 
+// 根据用户名查询用户详细
+export function selectSysUserByUsername(username) {
+  return request({
+    url: '/system/user/selectSysUserByUsername/' + username,
+    method: 'get'
+  })
+}
+
+
 // 新增用户
 export function addUser(data) {
   return request({
