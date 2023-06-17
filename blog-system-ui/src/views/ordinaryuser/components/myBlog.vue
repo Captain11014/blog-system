@@ -235,7 +235,7 @@ export default {
         pageSize: 10,
         title: null,
         content: null,
-        userId: this.userId,
+        userId: null,
         status: null,
         auditTime: null,
         auditUserId: null
@@ -267,18 +267,18 @@ export default {
   },
 
   watch: {
-    userId: function(n, o) {
-      console.log(n);
-      this.queryParams.userId = n;
-      this.getList();
-    }
+    // userId: function(n, o) {
+    //   console.log(n);
+    //   this.queryParams.userId = n;
+    //   this.getList();
+    // }
   },
 
   methods: {
     /** 查询文章博客列表 */
     getList() {
       this.loading = true;
-      //   this.queryParams.userId = this.userId;
+      this.queryParams.userId = this.userId;
       console.log(this.queryParams);
       listjoin(this.queryParams).then(response => {
         this.articleList = response.rows;

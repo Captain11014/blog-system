@@ -22,7 +22,9 @@
         <el-tab-pane name="sc" label="我的收藏">
           <my-favorite ref="myFavorite"></my-favorite>
         </el-tab-pane>
-        <el-tab-pane name="ls" label="浏览历史">浏览历史</el-tab-pane>
+        <el-tab-pane name="ls" label="浏览历史">
+          <my-browsing-history ref="myBrowsingHistory" :userId="sysUser.id"></my-browsing-history>
+        </el-tab-pane>
         <!-- <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane> -->
       </el-tabs>
 
@@ -82,12 +84,15 @@ import { selectSysUserByUsername, updateUser } from "@/api/system/sysUser";
 // } from "@/api/system/sysUser";
 import MyFavorite from "@/views/ordinaryuser/components/myFavorite";
 import MyBlog from "@/views/ordinaryuser/components/myBlog";
+import MyBrowsingHistory from "@/views/ordinaryuser/components/myBrowsingHistory"
+import { mergeRecursive } from '../../../utils/blog';
 export default {
   name: "personalcenter",
   components: {
     NavigationBar,
     MyFavorite,
-    MyBlog
+    MyBlog,
+    MyBrowsingHistory
   },
   data() {
     return {
@@ -105,7 +110,7 @@ export default {
         status: undefined
       },
       //标签页的初始值
-      tabVal: "blog",
+      tabVal: this.$route.query.tabVal, //"blog",
       open: false,
       dialogImageUrl: "",
       dialogVisible: false,
@@ -151,6 +156,7 @@ export default {
           } else {
             this.avatar = this.$store.getters.avatar;
           }
+          this.tabInit(this.tabVal);
         });
       }
     },
@@ -205,17 +211,33 @@ export default {
           });
           break;
         case "ls":
+          this.$nextTick(() => {
+            this.$refs.myBrowsingHistory.getList();
+          });
+          break;
+      }
+    },
+    //标签初始化
+    tabInit(name) {
+      //拿到标签页name值
+      switch (name) {
+        case "sc":
+          this.$nextTick(() => {
+            this.$refs.myFavorite.getList();
+          });
+          break;
+        case "blog":
+          this.$nextTick(() => {
+            this.$refs.myblog.getList();
+          });
+          break;
+        case "ls":
+          this.$nextTick(() => {
+            this.$refs.myBrowsingHistory.getList();
+          });
           break;
       }
     }
-    // //我的收藏
-    // myFavorite() {
-    //   console.log("我的收藏");
-    // },
-    // //浏览历史
-    // browsingHistory() {
-    //   console.log("浏览历史");
-    // }
   }
 };
 </script>

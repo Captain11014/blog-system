@@ -18,10 +18,19 @@ export function listjoin(query) {
   })
 }
 
-// 查询文章博客列表
+// 查询我的收藏文章博客列表
 export function selectArticleWidthFavorite(query) {
   return request({
     url: '/system/article/selectArticleWidthFavorite',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询文章浏览记录
+export function selectArticleWidthBrowsingHistory(query) {
+  return request({
+    url: '/system/article/selectArticleWidthBrowsingHistory',
     method: 'get',
     params: query
   })

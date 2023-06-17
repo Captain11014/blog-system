@@ -17,6 +17,7 @@
     <result property="updateTime"    column="update_time"    />
     <result property="remark"    column="remark"    />
     <result property="favoriteSum"    column="favorite_sum"    />
+    <result property="browsingSum"    column="browsing_sum"    />
     <association property="user" column="user_id" javaType="SysUser">
       <result property="id"    column="user_id"    />
       <result property="username"    column="username"    />
@@ -28,6 +29,20 @@
       <result property="nickname"    column="audit_nickname"    />
     </association>
   </resultMap>
+
+  <resultMap id="BrowsingHistoryResult" type="BrowsingHistory">
+    <result property="id"    column="b_id"    />
+    <result property="userId"    column="user_id_b"    />
+    <result property="articleId"    column="article_id"    />
+    <result property="createTime"    column="fb_time"    />
+    <result property="delFlag"    column="del_flag"    />
+    <association property="article" column="article_id" resultMap="ArticleResult"/>
+    <association property="user" column="user_id_b" javaType="SysUser">
+      <result property="nickname"    column="lsnickname"    />
+    </association>
+
+  </resultMap>
+
 
 
   <resultMap type="SysUser" id="SysUserResult">
@@ -68,7 +83,8 @@
       a.remark,
       u.username,u.nickname,
       u2.username as audit_username,u2.nickname as audit_nickname,
-      (select count(1) from favorite_article where article_id = a.id and del_flag = '0') as favorite_sum
+      (select count(1) from favorite_article where article_id = a.id and del_flag = '0') as favorite_sum,
+      (select count(1) from browsing_history where article_id = a.id ) as browsing_sum
     FROM
       article a
         LEFT JOIN sys_user u ON a.user_id = u.id
@@ -104,6 +120,43 @@
 <!--      <if test="auditUserId != null "> and a.audit_user_id = #{auditUserId}</if>-->
     </where>
     order by create_time desc
+  </select>
+
+  <!--  查询文章浏览记录-->
+  <select id="selectArticleWidthBrowsingHistory" parameterType="Article" resultMap="BrowsingHistoryResult">
+    SELECT
+    a.id,
+    a.title,
+    a.content,
+    a.user_id,
+    a.STATUS,
+    a.audit_time,
+    a.audit_user_id,
+    a.del_flag,
+    a.create_by,
+    a.create_time,
+    a.update_by,
+    a.update_time,
+    a.remark,
+    u.username,u.nickname,
+    (select count(1) from favorite_article where article_id = a.id and del_flag = '0') as favorite_sum,
+    (select count(1) from browsing_history where article_id = a.id and del_flag = '0' ) as browsing_sum,b.user_id user_id_b,b.id b_id,b.create_time fb_time,u3.nickname lsnickname
+    FROM
+    article a
+    LEFT JOIN sys_user u ON a.user_id = u.id
+    left join browsing_history b on a.id = b.article_id
+    left join sys_user u3 ON b.user_id = u3.id
+    <where>
+      a.del_flag = '0' and a.status = '1' and b.del_flag = '0'
+      <if test="title != null  and title != ''"> and a.title like concat('%',#{title},'%')</if>
+      <if test="nickname != null  and nickname != ''"> and u.nickname like concat('%',#{nickname},'%')</if>
+      <!--      <if test="content != null  and content != ''"> and a.content = #{content}</if>-->
+      <if test="userId != null "> and b.user_id = #{userId}</if>
+      <!--      <if test="status != null  and status != ''"> and a.status = #{status}</if>-->
+      <!--      <if test="auditTime != null "> and a.audit_time = #{auditTime}</if>-->
+      <!--      <if test="auditUserId != null "> and a.audit_user_id = #{auditUserId}</if>-->
+    </where>
+    order by b.create_time desc
   </select>
 
   <select id="selectArticleJoinList" parameterType="Article" resultMap="ArticleResult">

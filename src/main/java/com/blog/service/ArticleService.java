@@ -49,6 +49,15 @@ public interface ArticleService {
     public List<Article> selectArticleWidthFavorite(Article article);
 
     /**
+     * 查询文章浏览记录
+     * 此处传来的userId指的是收藏者的用户id并非作者Id
+     *
+     * @param article
+     * @return
+     */
+    public List<Article> selectArticleWidthBrowsingHistory(Article article);
+
+    /**
      * 新增文章博客
      *
      * @param article 文章博客

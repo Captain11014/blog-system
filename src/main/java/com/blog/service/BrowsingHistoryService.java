@@ -2,6 +2,8 @@ package com.blog.service;
 
 import com.blog.model.BrowsingHistory;
 
+import java.util.List;
+
 /**
  * <p>
  * 浏览记录表 服务类
@@ -11,5 +13,53 @@ import com.blog.model.BrowsingHistory;
  * @since 2023-05-23
  */
 public interface BrowsingHistoryService {
+
+    /**
+     * 查询浏览记录
+     *
+     * @param id 浏览记录主键
+     * @return 浏览记录
+     */
+    public BrowsingHistory selectBrowsingHistoryById(Long id);
+
+    /**
+     * 查询浏览记录列表
+     *
+     * @param browsingHistory 浏览记录
+     * @return 浏览记录集合
+     */
+    public List<BrowsingHistory> selectBrowsingHistoryList(BrowsingHistory browsingHistory);
+
+    /**
+     * 新增浏览记录
+     *
+     * @param browsingHistory 浏览记录
+     * @return 结果
+     */
+    public int insertBrowsingHistory(BrowsingHistory browsingHistory);
+
+    /**
+     * 修改浏览记录
+     *
+     * @param browsingHistory 浏览记录
+     * @return 结果
+     */
+    public int updateBrowsingHistory(BrowsingHistory browsingHistory);
+
+    /**
+     * 批量删除浏览记录
+     *
+     * @param ids 需要删除的浏览记录主键集合
+     * @return 结果
+     */
+    public int deleteBrowsingHistoryByIds(Long[] ids);
+
+    /**
+     * 删除浏览记录信息
+     *
+     * @param id 浏览记录主键
+     * @return 结果
+     */
+    public int deleteBrowsingHistoryById(Long id);
 
 }

@@ -107,10 +107,10 @@
       </el-table-column>
       <el-table-column label="审核时间" align="center" prop="auditTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.auditTime) }}</span>
+          <span>{{ parseTime(scope.row.auditTime,'{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="审核人id" align="center" prop="auditUserId" /> -->
+      <!-- <el-table-column label="审核人id" align="center" prop="createTime" /> -->
       <el-table-column label="审核人" align="center" prop="auditUser.nickname" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">

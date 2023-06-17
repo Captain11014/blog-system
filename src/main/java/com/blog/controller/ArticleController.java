@@ -53,6 +53,7 @@ public class ArticleController extends BaseController {
     {
         startPage();
         List<Article> list = articleService.selectArticleJoinList(article);
+        System.out.println(list);
         return getDataTable(list);
     }
 
@@ -81,6 +82,25 @@ public class ArticleController extends BaseController {
 
         startPage();
         List<Article> list = articleService.selectArticleWidthFavorite(article);
+        return getDataTable(list);
+    }
+
+
+    /**
+     * 查询文章浏览记录
+     * 此处传来的userId指的是收藏者的用户id并非作者Id
+     *
+     * @param article
+     * @return
+     */
+    @GetMapping("/selectArticleWidthBrowsingHistory")
+    public TableDataInfo selectArticleWidthBrowsingHistory(Article article,HttpServletRequest request){
+//        String token = request.getHeader("token");
+//        if(StringUtil.isNotEmpty(token)){
+//            article.setUserId(JwtUtil.getUserId(token));
+//        }
+        startPage();
+        List<Article> list = articleService.selectArticleWidthBrowsingHistory(article);
         return getDataTable(list);
     }
 

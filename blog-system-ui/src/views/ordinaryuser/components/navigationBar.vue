@@ -11,13 +11,13 @@
       >
         <el-menu-item index="1">首页</el-menu-item>
 
-        <el-menu-item v-if="open"  index="2">我的收藏</el-menu-item>
+        <el-menu-item v-if="open" index="2">我的收藏</el-menu-item>
       </el-menu>
 
       <div class="rightHead" v-if="isShow">
         <el-link :underline="false" type="primary">
           <router-link class="link-type" :to="'/login/pt'">登录</router-link>
-        </el-link> |
+        </el-link>|
         <el-link :underline="false" type="primary">
           <router-link class="link-type" :to="'/register'">注册</router-link>
         </el-link>
@@ -37,7 +37,7 @@ export default {
     return {
       isShow: true,
       activeIndex: "1",
-      open:true,
+      open: true
     };
   },
   created() {
@@ -45,9 +45,9 @@ export default {
     toKen ? (this.isShow = false) : (this.isShow = true);
 
     //如果是该路由地址则隐藏-》我的收藏
-    if(this.$route.path == '/personalcenter' || !this.$store.getters.name){
+    if (this.$route.path == "/personalcenter" || this.$route.path == "/articleDetail" || !this.$store.getters.name) {
       this.open = false;
-    }else{
+    } else {
       this.open = true;
     }
   },
@@ -59,19 +59,20 @@ export default {
         this.$store.dispatch("user/logout");
         setTimeout(() => {
           location.reload();
-        },1200)
+        }, 1200);
       });
     },
 
     handleSelect(value) {
+      this.toIndex();
       console.log(value);
+      this.$emit("myEvent", value);
     },
-    toIndex(){
+    toIndex() {
       this.$router.push({
-        path:'/',
-      })
-    },
-
+        path: "/"
+      });
+    }
   }
 };
 </script>
@@ -120,7 +121,7 @@ export default {
     width: 170px;
     height: 100%;
     float: left;
-    margin-left:30px;
+    margin-left: 30px;
     // border: 1px solid red;
   }
 }

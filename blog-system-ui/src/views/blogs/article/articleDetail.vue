@@ -36,7 +36,17 @@ import {
 } from "@/api/system/article";
 import { selectSysUserByUsername } from "@/api/system/sysUser";
 import { getToken } from "@/utils/auth";
-import { addFavorite , selectFavoriteArticleByIdAndUserId} from "@/api/system/favorite";
+import {
+  addFavorite,
+  selectFavoriteArticleByIdAndUserId
+} from "@/api/system/favorite";
+import {
+  listHistory,
+  getHistory,
+  delHistory,
+  addHistory,
+  updateHistory
+} from "@/api/system/history";
 export default {
   name: "ArticleDetail",
   components: {
@@ -74,7 +84,7 @@ export default {
         description: undefined,
         status: undefined
       },
-       //文章收藏记录对象
+      //文章收藏记录对象
       favoriteArticle: {
         id: null,
         articleId: null,
@@ -88,7 +98,7 @@ export default {
       },
       //用户已登录：true，未登录：false
       isShow: false,
-      isFavoite:false,
+      isFavoite: false
     };
   },
   created() {
@@ -96,11 +106,10 @@ export default {
     toKen ? (this.isShow = true) : (this.isShow = false);
     this.getInfo();
     this.getArticleInfo();
-
   },
 
-  mounted(){
-    if(getToken()){
+  mounted() {
+    if (getToken()) {
       this.isF();
     }
   },
@@ -116,7 +125,10 @@ export default {
           console.log("获取用户信息");
           console.log(response);
           this.sysUser = response.data;
+          //判断用户是否收藏了该文章
           this.isF();
+          //新增浏览记录
+          this.historyInsert(this.sysUser.id);
         });
       }
     },
@@ -128,33 +140,46 @@ export default {
       });
     },
 
-     //收藏按钮
-    favoriteBtn(){
+    //收藏按钮
+    favoriteBtn() {
       this.favoriteArticle.articleId = this.article.id;
       this.favoriteArticle.userId = this.sysUser.id;
-      this.$modal.confirm("是否确定收藏文章："+this.article.title).then(() => {
-        addFavorite(this.favoriteArticle).then(response => {
-          this.isF();
-          this.$modal.msgSuccess("收藏成功");
-        })
-      })
+      this.$modal
+        .confirm("是否确定收藏文章：" + this.article.title)
+        .then(() => {
+          addFavorite(this.favoriteArticle).then(response => {
+            this.isF();
+            this.$modal.msgSuccess("收藏成功");
+          });
+        });
     },
 
-
-    isF(){
+    //判断用户是否已经收藏该文章，已收藏不在展示收藏按钮。
+    isF() {
       let param = {
-        userId:this.sysUser.id,
+        userId: this.sysUser.id,
         articleId: this.id
-      }
+      };
       selectFavoriteArticleByIdAndUserId(param).then(response => {
         console.log(response);
-        if(response.favTrue == '1'){
+        if (response.favTrue == "1") {
           this.isFavoite = true;
-        }else{
+        } else {
           this.isFavoite = false;
         }
-      })
+      });
     },
+
+    //新增浏览记录，未登录情况下不计入浏览量
+    historyInsert(userId) {
+      let browsingHistory = {
+        userId: userId,
+        articleId: parseInt(this.id)
+      };
+      addHistory(browsingHistory).then(response => {
+        console.log("添加浏览记录成功");
+      });
+    }
   }
 };
 </script>

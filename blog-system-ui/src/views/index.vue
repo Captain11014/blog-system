@@ -1,6 +1,6 @@
 <template>
   <div class="blogs-index">
-    <navigation-bar></navigation-bar>
+    <navigation-bar @myEvent="navigClick"></navigation-bar>
 
     <div class="blogs-content">
       <el-card class="box-card" v-for="item in articleList" :key="item.id">
@@ -16,7 +16,7 @@
           <div class="articleUserInfo">
             <div><span>作者：{{item.user.nickname}}</span></div>
             <div><span>发布：{{parseTime(item.createTime,'{y}-{m}-{d}')}}</span></div>
-            <div><span>浏览：0</span></div>
+            <div><span>浏览：{{item.browsingSum}}</span></div>
             <div><span>评论：0</span></div>
             <div><span>收藏：{{item.favoriteSum}}</span></div>
           </div>
@@ -45,16 +45,16 @@
         <div class="menu">
           <ul>
             <li>
-              <span @click="toPersonalcenter()">个人中心</span>
+              <span @click="toPersonalcenter('blog')">个人中心</span>
             </li>
             <li>
-              <span>我的博客</span>
+              <span @click="toPersonalcenter('blog')">我的博客</span>
             </li>
             <li>
-              <span>我的收藏</span>
+              <span @click="toPersonalcenter('sc')">我的收藏</span>
             </li>
             <li>
-              <span>浏览历史</span>
+              <span @click="toPersonalcenter('ls')">浏览历史</span>
             </li>
             <!-- <li></li> -->
           </ul>
@@ -78,7 +78,8 @@ import {
   delArticle,
   addArticle,
   updateArticle,
-  listjoin
+  listjoin,
+  selectArticleWidthFavorite
 } from "@/api/system/article";
 
 export default {
@@ -143,12 +144,37 @@ export default {
 
     //获取文章列表信息
     getList() {
+      this.$modal.loading("正在加载中...");
       listjoin(this.queryParams).then(response => {
         this.articleList = response.rows;
         this.total = response.total;
         console.log(this.articleList);
+        this.$modal.closeLoading();
       });
     },
+
+    //获取我的收藏文章列表
+    getMyFavoriteList(){
+      this.$modal.loading("正在加载中...");
+      selectArticleWidthFavorite(this.queryParams).then(response => {
+        this.articleList = response.rows;
+        this.total = response.total;
+        this.$modal.closeLoading();
+      })
+    },
+
+    //子组件的点击事件
+    navigClick(value){
+      console.log("dd"+value);
+
+      if(value == '1'){
+        this.getList();
+      }else{
+        this.getMyFavoriteList();
+      }
+
+    },
+
     //前往文章详情页
     toArticleDetail(id) {
       let url = this.$router.resolve({
@@ -161,9 +187,12 @@ export default {
       window.open(url, "_blank");
     },
     //前往个人中心
-    toPersonalcenter() {
+    toPersonalcenter(val) {
       this.$router.push({
-        path: "/personalcenter"
+        path: "/personalcenter",
+        query:{
+          tabVal:val
+        }
       });
     },
   

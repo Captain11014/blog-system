@@ -41,4 +41,10 @@ public class BrowsingHistory extends BaseEntity{
      */
     private String delFlag;
 
+//    private List<Article>
+
+    private Article article;
+
+    private SysUser user;
+
 }

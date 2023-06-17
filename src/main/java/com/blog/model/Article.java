@@ -55,7 +55,7 @@ public class Article extends BaseEntity{
     /**
      * 审核时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date auditTime;
 
@@ -75,6 +75,11 @@ public class Article extends BaseEntity{
     private Integer favoriteSum;
 
     /**
+     * 浏览记录数量
+     */
+    private Integer browsingSum;
+
+    /**
      * 用户信息（博客作者）
      */
     private SysUser user;
@@ -88,6 +93,11 @@ public class Article extends BaseEntity{
      * 作者
      */
     private String nickname;
+
+    /**
+     * 浏览记录
+     */
+    private BrowsingHistory browsingHistory;
 
 
 
