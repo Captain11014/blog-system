@@ -11,12 +11,21 @@ export function listArticle(query) {
 
 // 查询文章博客列表
 export function listjoin(query) {
-    return request({
-      url: '/system/article/listjoin',
-      method: 'get',
-      params: query
-    })
-  }
+  return request({
+    url: '/system/article/listjoin',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询文章博客列表
+export function selectArticleWidthFavorite(query) {
+  return request({
+    url: '/system/article/selectArticleWidthFavorite',
+    method: 'get',
+    params: query
+  })
+}
 
 
 // 查询文章博客详细

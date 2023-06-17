@@ -3,7 +3,9 @@ package com.blog.controller;
 
 import com.blog.model.Article;
 import com.blog.service.ArticleService;
+import com.blog.util.StringUtil;
 import com.blog.util.base.BaseController;
+import com.blog.util.jwt.JwtUtil;
 import com.blog.util.page.TableDataInfo;
 import com.blog.util.result.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,25 @@ public class ArticleController extends BaseController {
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
         return success(articleService.selectArticleById(id));
+    }
+
+    /**
+     * 查询我的收藏文章
+     * 此处传来的userId指的是收藏者的用户id并非作者Id
+     * @param article
+     * @return
+     */
+    @GetMapping("/selectArticleWidthFavorite")
+    public TableDataInfo selectArticleWidthFavorite(Article article,HttpServletRequest request){
+
+        String token = request.getHeader("token");
+        if(StringUtil.isNotEmpty(token)){
+            article.setUserId(JwtUtil.getUserId(token));
+        }
+
+        startPage();
+        List<Article> list = articleService.selectArticleWidthFavorite(article);
+        return getDataTable(list);
     }
 
     /**

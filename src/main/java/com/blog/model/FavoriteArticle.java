@@ -34,10 +34,6 @@ public class FavoriteArticle extends BaseEntity {
      */
     private Long articleId;
 
-    /**
-     * 收藏夹id
-     */
-    private Long favoriteId;
 
     /**
      * 用户id

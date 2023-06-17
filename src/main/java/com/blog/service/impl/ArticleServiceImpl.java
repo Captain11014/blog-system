@@ -60,6 +60,17 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     /**
+     * 查询我的收藏文章
+     * 此处传来的userId指的是收藏者的用户id并非作者Id
+     * @param article
+     * @return
+     */
+    @Override
+    public List<Article> selectArticleWidthFavorite(Article article){
+        return articleMapper.selectArticleWidthFavorite(article);
+    }
+
+    /**
      * 新增文章博客
      *
      * @param article 文章博客

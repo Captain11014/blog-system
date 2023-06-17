@@ -15,10 +15,14 @@
 
       <el-divider></el-divider>
 
-      <el-tabs class="usertab" type="border-card">
-        <el-tab-pane label="我的博客">我的博客</el-tab-pane>
-        <el-tab-pane label="我的收藏">我的收藏</el-tab-pane>
-        <el-tab-pane label="浏览历史">浏览历史</el-tab-pane>
+      <el-tabs :value="tabVal" class="usertab" @tab-click="myBlog" type="border-card">
+        <el-tab-pane name="blog" label="我的博客">
+          <my-blog ref="myblog" :userId="sysUser.id"></my-blog>
+        </el-tab-pane>
+        <el-tab-pane name="sc" label="我的收藏">
+          <my-favorite ref="myFavorite"></my-favorite>
+        </el-tab-pane>
+        <el-tab-pane name="ls" label="浏览历史">浏览历史</el-tab-pane>
         <!-- <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane> -->
       </el-tabs>
 
@@ -55,20 +59,6 @@
               <img v-if="sysUser.headUrl" :src="baseUrl+sysUser.headUrl" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-            <!-- <el-upload
-              :limit="1"
-              :action="uploadImgUrl"
-              list-type="picture-card"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove"
-              :on-success="uploadSuccess"
-            >
-              <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" />
-              <i class="el-icon-plus"></i>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt />
-            </el-dialog>-->
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -90,15 +80,20 @@ import { selectSysUserByUsername, updateUser } from "@/api/system/sysUser";
 //   addUser,
 //   updateUser
 // } from "@/api/system/sysUser";
+import MyFavorite from "@/views/ordinaryuser/components/myFavorite";
+import MyBlog from "@/views/ordinaryuser/components/myBlog";
 export default {
   name: "personalcenter",
   components: {
-    NavigationBar
+    NavigationBar,
+    MyFavorite,
+    MyBlog
   },
   data() {
     return {
       avatar: "",
       sysUser: {
+        id: undefined,
         username: undefined,
         password: undefined,
         birthday: undefined,
@@ -109,6 +104,8 @@ export default {
         description: undefined,
         status: undefined
       },
+      //标签页的初始值
+      tabVal: "blog",
       open: false,
       dialogImageUrl: "",
       dialogVisible: false,
@@ -123,10 +120,18 @@ export default {
           { required: true, message: "用户名不能为空", trigger: "blur" }
         ]
       }
+      //根据用户是否登录 ： true：用户已登录，false：未登录
     };
   },
   created() {
     this.getInfo();
+  },
+
+  mounted() {
+    // this.$refs.myblog.getList();
+    // this.$nextTick(() => {
+    //   this.$refs.myblog.getList();
+    // });
   },
 
   methods: {
@@ -140,6 +145,7 @@ export default {
         selectSysUserByUsername(username).then(response => {
           console.log(response);
           this.sysUser = response.data;
+          //判断用户头像是否为空，若为空则设置默认值
           if (this.sysUser.headUrl != "" && this.sysUser.headUrl != null) {
             this.avatar = this.baseUrl + this.sysUser.headUrl;
           } else {
@@ -180,7 +186,36 @@ export default {
     cancel() {
       this.open = false;
       this.getInfo();
+    },
+    //标签页点击
+    myBlog(value) {
+      //拿到标签页name值
+      let name = value.name;
+      console.log(value.name);
+
+      switch (name) {
+        case "sc":
+          this.$nextTick(() => {
+            this.$refs.myFavorite.getList();
+          });
+          break;
+        case "blog":
+          this.$nextTick(() => {
+            this.$refs.myblog.getList();
+          });
+          break;
+        case "ls":
+          break;
+      }
     }
+    // //我的收藏
+    // myFavorite() {
+    //   console.log("我的收藏");
+    // },
+    // //浏览历史
+    // browsingHistory() {
+    //   console.log("浏览历史");
+    // }
   }
 };
 </script>
@@ -230,7 +265,7 @@ export default {
     }
   }
 
-  .usertab{
+  .usertab {
     min-height: calc(100vh - 290px);
   }
 }

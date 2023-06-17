@@ -4,13 +4,19 @@
     <!-- <span v-html=""></span> -->
 
     <div class="blogs-content">
+      <el-button
+        v-if="isShow && article.userId != sysUser.id && !isFavoite"
+        class="editUser"
+        type="primary"
+        icon="el-icon-star-off"
+        @click="favoriteBtn()"
+      >收藏</el-button>
       <div class="blog-title">
         <span>
           <h2>{{article.title}}</h2>
           <!-- <div> -->
-            <span>作者：{{article.user.nickname}}</span>
-            <span style="margin-left: 20px">发布于：{{parseTime(article.createTime,'{y}-{m}-{d}')}}</span>
-          <!-- </div> -->
+          <span>作者：{{article.user.nickname}}</span>
+          <span style="margin-left: 20px">发布于：{{parseTime(article.createTime,'{y}-{m}-{d}')}}</span>
         </span>
       </div>
       <span v-html="article.content"></span>
@@ -28,6 +34,9 @@ import {
   updateArticle,
   listjoin
 } from "@/api/system/article";
+import { selectSysUserByUsername } from "@/api/system/sysUser";
+import { getToken } from "@/utils/auth";
+import { addFavorite , selectFavoriteArticleByIdAndUserId} from "@/api/system/favorite";
 export default {
   name: "ArticleDetail",
   components: {
@@ -35,7 +44,7 @@ export default {
   },
   data() {
     return {
-      id : this.$route.query.articleId,
+      id: this.$route.query.articleId,
       article: {
         id: null,
         title: null,
@@ -50,21 +59,100 @@ export default {
         updateBy: null,
         updateTime: null,
         remark: null,
-        user:{
-          nickname:null,
+        user: {
+          nickname: null
         }
-      }
+      },
+      sysUser: {
+        username: undefined,
+        password: undefined,
+        birthday: undefined,
+        nickname: undefined,
+        email: undefined,
+        headUrl: undefined,
+        openId: undefined,
+        description: undefined,
+        status: undefined
+      },
+       //文章收藏记录对象
+      favoriteArticle: {
+        id: null,
+        articleId: null,
+        userId: null,
+        delFlag: null,
+        createBy: null,
+        createTime: null,
+        updateBy: null,
+        updateTime: null,
+        remark: null
+      },
+      //用户已登录：true，未登录：false
+      isShow: false,
+      isFavoite:false,
     };
   },
-  created(){
+  created() {
+    const toKen = getToken();
+    toKen ? (this.isShow = true) : (this.isShow = false);
+    this.getInfo();
     this.getArticleInfo();
+
   },
 
-  methods:{
-    getArticleInfo(){
+  mounted(){
+    if(getToken()){
+      this.isF();
+    }
+  },
+
+  methods: {
+    //获取用户信息
+    getInfo() {
+      //获取当前登录用户名
+      const username = this.$store.getters.name;
+      //根据用户名获取用户信息
+      if (username) {
+        selectSysUserByUsername(username).then(response => {
+          console.log("获取用户信息");
+          console.log(response);
+          this.sysUser = response.data;
+          this.isF();
+        });
+      }
+    },
+
+    getArticleInfo() {
       getArticle(this.id).then(response => {
         console.log(response);
         this.article = response.data;
+      });
+    },
+
+     //收藏按钮
+    favoriteBtn(){
+      this.favoriteArticle.articleId = this.article.id;
+      this.favoriteArticle.userId = this.sysUser.id;
+      this.$modal.confirm("是否确定收藏文章："+this.article.title).then(() => {
+        addFavorite(this.favoriteArticle).then(response => {
+          this.isF();
+          this.$modal.msgSuccess("收藏成功");
+        })
+      })
+    },
+
+
+    isF(){
+      let param = {
+        userId:this.sysUser.id,
+        articleId: this.id
+      }
+      selectFavoriteArticleByIdAndUserId(param).then(response => {
+        console.log(response);
+        if(response.favTrue == '1'){
+          this.isFavoite = true;
+        }else{
+          this.isFavoite = false;
+        }
       })
     },
   }
@@ -91,12 +179,16 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   padding: 10px 10px;
   // padding-left: 10px;
-  .blog-title{
+  .blog-title {
     border-bottom: 1px solid rgb(123, 120, 120);
     // margin-top: 20px;
-    span{
-      // margin-left: 20px; 
+    span {
+      // margin-left: 20px;
     }
+  }
+  .editUser {
+    position: absolute;
+    right: 0;
   }
 }
 </style>

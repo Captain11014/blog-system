@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="MyBlog">
     <el-form
       :model="queryParams"
       ref="queryForm"
@@ -8,7 +8,7 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="标题" prop="title">
+      <el-form-item prop="title">
         <el-input
           v-model="queryParams.title"
           placeholder="请输入标题"
@@ -16,8 +16,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="审核状态" prop="status">
-        <el-select v-model="queryParams.status" clearable placeholder="请选择">
+      <el-form-item prop="status">
+        <el-select v-model="queryParams.status" clearable placeholder="请选择状态">
           <el-option
             v-for="item in statusOptions"
             :key="item.value"
@@ -26,15 +26,15 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="作者" prop="nickname">
+      <!-- <el-form-item label="作者" prop="nickname">
         <el-input
-          v-model="queryParams.nickname"
+          v-model="queryParams.params.nickname"
           placeholder="请输入作者"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <!-- <el-form-item label="审核时间" prop="auditTime">
+      <el-form-item label="审核时间" prop="auditTime">
         <el-date-picker
           clearable
           v-model="queryParams.auditTime"
@@ -42,8 +42,8 @@
           value-format="yyyy-MM-dd"
           placeholder="请选择审核时间"
         ></el-date-picker>
-      </el-form-item> -->
-      <!-- <el-form-item label="审核人id" prop="auditUserId">
+      </el-form-item>
+      <el-form-item label="审核人id" prop="auditUserId">
         <el-input
           v-model="queryParams.auditUserId"
           placeholder="请输入审核人id"
@@ -58,10 +58,10 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <!-- <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
-      </el-col>-->
       <el-col :span="1.5">
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd">创作</el-button>
+      </el-col>
+      <!-- <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -70,7 +70,7 @@
           :disabled="single"
           @click="handleUpdate"
         >审核</el-button>
-      </el-col>
+      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -85,7 +85,7 @@
 
     <el-table v-loading="loading" :data="articleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
+      <!-- <el-table-column label="主键" align="center" prop="id" /> -->
       <el-table-column label="标题" align="center" prop="title">
         <template slot-scope="scope">
           <el-link
@@ -100,22 +100,26 @@
       <el-table-column label="作者" align="center" prop="user.nickname" />
       <el-table-column label="审核状态" align="center" prop="status">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === ARTICLE_STATUS_AUDIT">审核中</span>
-          <span v-if="scope.row.status === ARTICLE_STATUS_TRUE">审核通过</span>
-          <span v-if="scope.row.status === ARTICLE_STATUS_FALSE">审核未通过</span>
+          <span v-if="scope.row.status === ARTICLE_STATUS_AUDIT" style="color:#409EFF">审核中</span>
+          <span v-if="scope.row.status === ARTICLE_STATUS_TRUE" style="color:#67C23A">审核通过</span>
+          <span v-if="scope.row.status === ARTICLE_STATUS_FALSE" style="color:#F56C6C">审核未通过</span>
         </template>
       </el-table-column>
       <el-table-column label="审核时间" align="center" prop="auditTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.auditTime) }}</span>
+          <span>{{ parseTime(scope.row.auditTime,'{y}-{m}-{d}')}}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column label="审核人id" align="center" prop="auditUserId" /> -->
-      <el-table-column label="审核人" align="center" prop="auditUser.nickname" />
+      <!-- <el-table-column label="审核人" align="center" prop="auditUser.nickname" /> -->
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">审核</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">
+            <!-- 修改 -->
+            <span >修改</span>
+            <!-- v-if="scope.row.status != ARTICLE_STATUS_FALSE"<span v-else>重新提交</span> -->
+          </el-button>
           <el-button
             size="mini"
             type="text"
@@ -166,11 +170,11 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
-        <el-form-item label="审核" prop="status">
+        <!-- <el-form-item label="审核" prop="status">
           <el-radio v-model="form.status" label="0">审核中</el-radio>
           <el-radio v-model="form.status" label="1">审核通过</el-radio>
           <el-radio v-model="form.status" label="2">审核不通过</el-radio>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -190,12 +194,15 @@ import {
   updateArticle,
   listjoin
 } from "@/api/system/article";
-import { selectSysUserByUsername, updateUser } from "@/api/system/sysUser";
 
 //审核状态（0代表审核中 1代表审核通过 2代表审核未通过）
 
 export default {
-  name: "Article",
+  name: "MyBlog",
+  //props传递的值不允许更改
+  props: {
+    userId: Number
+  },
   data() {
     return {
       // 遮罩层
@@ -228,11 +235,10 @@ export default {
         pageSize: 10,
         title: null,
         content: null,
-        userId: null,
+        userId: this.userId,
         status: null,
         auditTime: null,
-        auditUserId: null,
-        nickname:null,
+        auditUserId: null
       },
       //审核状态（0代表审核中 1代表审核通过 2代表审核未通过）
       statusOptions: [
@@ -252,42 +258,28 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {},
-      sysUser: {
-        id: undefined,
-        username: undefined,
-        password: undefined,
-        birthday: undefined,
-        nickname: undefined,
-        email: undefined,
-        headUrl: undefined,
-        openId: undefined,
-        description: undefined,
-        status: undefined
-      },
+      rules: {}
     };
   },
   created() {
-    this.getList();
-    this.getInfo();
+    // this.getList();
+    // alert(this.queryParams.userId)
   },
+
+  watch: {
+    userId: function(n, o) {
+      console.log(n);
+      this.queryParams.userId = n;
+      this.getList();
+    }
+  },
+
   methods: {
-    //获取用户信息
-    getInfo() {
-      //获取当前登录用户名
-      const username = this.$store.getters.name;
-      //根据用户名获取用户信息
-      if (username) {
-        console.log("执行...");
-        selectSysUserByUsername(username).then(response => {
-          console.log(response);
-          this.sysUser = response.data;
-        });
-      }
-    },
     /** 查询文章博客列表 */
     getList() {
       this.loading = true;
+      //   this.queryParams.userId = this.userId;
+      console.log(this.queryParams);
       listjoin(this.queryParams).then(response => {
         this.articleList = response.rows;
         console.log(response);
@@ -322,8 +314,6 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
-      // this.queryParams.auditTime = new Date(this.parseTime(this.queryParams.auditTime,'{y}-{m}-{d} {h}:{i}:{s}'));
-      console.log(this.queryParams);
       this.getList();
     },
     /** 重置按钮操作 */
@@ -355,11 +345,15 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      this.form.userId = this.userId;
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            this.form.auditUserId = this.sysUser.id;
-            this.form.auditTime = this.parseTime(new Date(),'{y}-{m}-{d} {h}:{i}:{s}');
+            //如果审核未通过，重新提交则文章状态从新变为审核中
+            if(this.form.status == this.ARTICLE_STATUS_FALSE){
+              this.form.status = this.ARTICLE_STATUS_AUDIT;
+            }
+
             updateArticle(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -432,14 +426,14 @@ export default {
   overflow: hidden; /* 溢出部分隐藏 */
 }
 .el-dialog:not(.is-fullscreen) {
-    margin-top: 0vh !important;
+  margin-top: 0vh !important;
 }
 
 .el-dialog__body {
-    padding: 2px 20px;
+  padding: 2px 20px;
 }
 
 .el-dialog__footer {
-    padding: 2px 20px 2px;
+  padding: 2px 20px 2px;
 }
 </style>

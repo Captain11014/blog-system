@@ -57,7 +57,9 @@ export default {
       this.$modal.confirm("确定退出登录吗？").then(() => {
         this.isShow = true;
         this.$store.dispatch("user/logout");
-        location.reload();
+        setTimeout(() => {
+          location.reload();
+        },1200)
       });
     },
 

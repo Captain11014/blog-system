@@ -16,6 +16,7 @@
     <result property="updateBy"    column="update_by"    />
     <result property="updateTime"    column="update_time"    />
     <result property="remark"    column="remark"    />
+    <result property="favoriteSum"    column="favorite_sum"    />
     <association property="user" column="user_id" javaType="SysUser">
       <result property="id"    column="user_id"    />
       <result property="username"    column="username"    />
@@ -37,7 +38,6 @@
     <result property="nickname"    column="nickname"    />
     <result property="email"    column="email"    />
     <result property="headUrl"    column="head_url"    />
-    <result property="openId"    column="open_id"    />
     <result property="description"    column="description"    />
     <result property="status"    column="status"    />
     <result property="createTime"    column="create_time"    />
@@ -67,7 +67,8 @@
       a.update_time,
       a.remark,
       u.username,u.nickname,
-      u2.username as audit_username,u2.nickname as audit_nickname
+      u2.username as audit_username,u2.nickname as audit_nickname,
+      (select count(1) from favorite_article where article_id = a.id and del_flag = '0') as favorite_sum
     FROM
       article a
         LEFT JOIN sys_user u ON a.user_id = u.id
@@ -88,17 +89,36 @@
     </where>
   </select>
 
+<!--  查询我的收藏文章-->
+  <select id="selectArticleWidthFavorite" parameterType="Article" resultMap="ArticleResult">
+    <include refid="selectArticleVo1"/>
+    left join favorite_article fa ON a.id = fa.article_id
+    <where>
+      a.del_flag = '0' and a.status = '1' and fa.del_flag = '0' and fa.user_id = #{userId}
+      <if test="title != null  and title != ''"> and a.title like concat('%',#{title},'%')</if>
+      <if test="nickname != null  and nickname != ''"> and u.nickname like concat('%',#{nickname},'%')</if>
+<!--      <if test="content != null  and content != ''"> and a.content = #{content}</if>-->
+<!--      <if test="userId != null "> and a.user_id = #{userId}</if>-->
+<!--      <if test="status != null  and status != ''"> and a.status = #{status}</if>-->
+<!--      <if test="auditTime != null "> and a.audit_time = #{auditTime}</if>-->
+<!--      <if test="auditUserId != null "> and a.audit_user_id = #{auditUserId}</if>-->
+    </where>
+    order by create_time desc
+  </select>
+
   <select id="selectArticleJoinList" parameterType="Article" resultMap="ArticleResult">
     <include refid="selectArticleVo1"/>
     <where>
       a.del_flag = '0'
       <if test="title != null  and title != ''"> and a.title like concat('%',#{title},'%')</if>
+      <if test="nickname != null  and nickname != ''"> and u.nickname like concat('%',#{nickname},'%')</if>
       <if test="content != null  and content != ''"> and a.content = #{content}</if>
       <if test="userId != null "> and a.user_id = #{userId}</if>
       <if test="status != null  and status != ''"> and a.status = #{status}</if>
       <if test="auditTime != null "> and a.audit_time = #{auditTime}</if>
       <if test="auditUserId != null "> and a.audit_user_id = #{auditUserId}</if>
     </where>
+    order by create_time desc
   </select>
 
   <select id="selectArticleById" parameterType="Long" resultMap="ArticleResult">
@@ -157,9 +177,9 @@
     where id = #{id}
   </update>
 
-  <delete id="deleteArticleById" parameterType="Long">
+  <update id="deleteArticleById" parameterType="Long">
     update article set del_flag = '2' where id = #{id}
-  </delete>
+  </update>
 
   <update id="deleteArticleByIds" parameterType="String">
     update article set del_flag = '2' where id in

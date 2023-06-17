@@ -42,6 +42,14 @@ public interface ArticleMapper{
     public List<Article> selectArticleJoinList(Article article);
 
     /**
+     * 查询我的收藏文章
+     * 此处传来的userId指的是收藏者的用户id并非作者Id
+     * @param article
+     * @return
+     */
+    public List<Article> selectArticleWidthFavorite(Article article);
+
+    /**
      * 新增文章博客
      *
      * @param article 文章博客

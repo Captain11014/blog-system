@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -55,6 +56,7 @@ public class Article extends BaseEntity{
      * 审核时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date auditTime;
 
     /**
@@ -68,6 +70,11 @@ public class Article extends BaseEntity{
     private String delFlag;
 
     /**
+     * 收藏数量
+     */
+    private Integer favoriteSum;
+
+    /**
      * 用户信息（博客作者）
      */
     private SysUser user;
@@ -76,6 +83,12 @@ public class Article extends BaseEntity{
      * 审核员信息
      */
     private SysUser auditUser;
+
+    /**
+     * 作者
+     */
+    private String nickname;
+
 
 
 }
