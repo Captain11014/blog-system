@@ -2,7 +2,9 @@ package com.blog.controller;
 
 
 import com.blog.model.BrowsingHistory;
+import com.blog.model.Constant;
 import com.blog.service.BrowsingHistoryService;
+import com.blog.util.annotation.Log;
 import com.blog.util.base.BaseController;
 import com.blog.util.page.TableDataInfo;
 import com.blog.util.result.AjaxResult;
@@ -51,6 +53,7 @@ public class BrowsingHistoryController extends BaseController {
     /**
      * 新增浏览记录
      */
+    @Log(title = "浏览记录",operate = Constant.OPERATE_INSERTE)
     @PostMapping
     public AjaxResult add(@RequestBody BrowsingHistory browsingHistory)
     {
@@ -60,6 +63,7 @@ public class BrowsingHistoryController extends BaseController {
     /**
      * 修改浏览记录
      */
+    @Log(title = "浏览记录",operate = Constant.OPERATE_UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BrowsingHistory browsingHistory)
     {
@@ -69,6 +73,7 @@ public class BrowsingHistoryController extends BaseController {
     /**
      * 删除浏览记录
      */
+    @Log(title = "浏览记录",operate = Constant.OPERATE_DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {

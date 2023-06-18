@@ -56,6 +56,23 @@ public class Constant {
      */
     public static final String RESOURCE_PREFIX = "/profile";
 
+    /**
+     * 操作类型SELECT
+     */
+    public static final String OPERATE_SELECT = "SELECT";
+    /**
+     * 操作类型INDERT
+     */
+    public static final String OPERATE_INSERTE = "INSERTE";
+    /**
+     * 操作类型UPDATE
+     */
+    public static final String OPERATE_UPDATE = "UPDATE";
+    /**
+     * 操作类型DELETE
+     */
+    public static final String OPERATE_DELETE = "DELETE";
+
 
 
 }

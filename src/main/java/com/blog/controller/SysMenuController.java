@@ -1,8 +1,10 @@
 package com.blog.controller;
 
 
+import com.blog.model.Constant;
 import com.blog.model.SysMenu;
 import com.blog.service.SysMenuService;
+import com.blog.util.annotation.Log;
 import com.blog.util.base.BaseController;
 import com.blog.util.page.TableDataInfo;
 import com.blog.util.result.AjaxResult;
@@ -63,6 +65,7 @@ public class SysMenuController extends BaseController {
     /**
      * 新增菜单
      */
+    @Log(title = "菜单管理",operate = Constant.OPERATE_INSERTE)
     @PostMapping
     public AjaxResult add(@RequestBody SysMenu sysMenu)
     {
@@ -72,6 +75,7 @@ public class SysMenuController extends BaseController {
     /**
      * 修改菜单
      */
+    @Log(title = "菜单管理",operate = Constant.OPERATE_UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysMenu sysMenu)
     {
@@ -81,6 +85,7 @@ public class SysMenuController extends BaseController {
     /**
      * 删除菜单
      */
+    @Log(title = "菜单管理",operate = Constant.OPERATE_DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {

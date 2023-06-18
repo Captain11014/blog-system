@@ -6,6 +6,7 @@ import com.blog.service.SysMenuService;
 import com.blog.service.SysUserService;
 import com.blog.util.MD5;
 import com.blog.util.StringUtil;
+import com.blog.util.annotation.Log;
 import com.blog.util.base.BaseController;
 import com.blog.util.exception.BlogEcxeption;
 import com.blog.util.jwt.JwtUtil;
@@ -40,6 +41,7 @@ public class LoginController extends BaseController {
      * 登录
      * @return
      */
+    @Log(title = "登录",operate = Constant.OPERATE_SELECT)
     @PostMapping("login")
     public AjaxResult login(@RequestBody LoginUser loginUser) {
 
@@ -65,6 +67,7 @@ public class LoginController extends BaseController {
      * 获取用户信息
      * @return
      */
+//    @Log(title = "用户信息",operate = Constant.OPERATE_SELECT)
     @GetMapping("info")
     public AjaxResult info(HttpServletRequest request) {
 
@@ -93,6 +96,7 @@ public class LoginController extends BaseController {
      * 退出
      * @return
      */
+    @Log(title = "退出登录",operate = Constant.OPERATE_DELETE)
     @PostMapping("logout")
     public AjaxResult logout(){
         return success();

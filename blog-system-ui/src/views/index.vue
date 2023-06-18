@@ -254,9 +254,9 @@ body {
     margin-bottom: 10px;
   }
 
-  .articleUserInfo-p{
-    // border: 1px solid black;
-  }
+  // .articleUserInfo-p{
+  //   // border: 1px solid black;
+  // }
 }
 
 .blogs-userInfo {

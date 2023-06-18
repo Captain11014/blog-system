@@ -5,6 +5,7 @@ import cn.hutool.core.lang.UUID;
 import com.blog.config.ServerConfig;
 import com.blog.model.Constant;
 import com.blog.util.ServletUtil;
+import com.blog.util.annotation.Log;
 import com.blog.util.exception.BlogEcxeption;
 import com.blog.util.result.AjaxResult;
 import com.blog.util.result.HttpStatus;
@@ -38,6 +39,7 @@ public class CommonController {
 
 
 
+    @Log(title = "文件上传",operate = Constant.OPERATE_INSERTE)
     @RequestMapping("/upload")
     public AjaxResult uploadFile(MultipartFile file){
 

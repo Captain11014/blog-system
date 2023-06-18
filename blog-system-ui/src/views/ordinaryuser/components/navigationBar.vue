@@ -17,7 +17,8 @@
       <div class="rightHead" v-if="isShow">
         <el-link :underline="false" type="primary">
           <router-link class="link-type" :to="'/login/pt'">登录</router-link>
-        </el-link>|
+        </el-link>
+        <span>&nbsp;|&nbsp;</span>
         <el-link :underline="false" type="primary">
           <router-link class="link-type" :to="'/register'">注册</router-link>
         </el-link>
@@ -45,7 +46,11 @@ export default {
     toKen ? (this.isShow = false) : (this.isShow = true);
 
     //如果是该路由地址则隐藏-》我的收藏
-    if (this.$route.path == "/personalcenter" || this.$route.path == "/articleDetail" || !this.$store.getters.name) {
+    if (
+      this.$route.path == "/personalcenter" ||
+      this.$route.path == "/articleDetail" ||
+      !this.$store.getters.name
+    ) {
       this.open = false;
     } else {
       this.open = true;

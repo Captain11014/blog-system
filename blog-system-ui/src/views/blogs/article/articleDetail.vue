@@ -207,9 +207,9 @@ export default {
   .blog-title {
     border-bottom: 1px solid rgb(123, 120, 120);
     // margin-top: 20px;
-    span {
+    // span {
       // margin-left: 20px;
-    }
+    // }
   }
   .editUser {
     position: absolute;

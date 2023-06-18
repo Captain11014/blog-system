@@ -1,8 +1,10 @@
 package com.blog.controller;
 
 
+import com.blog.model.Constant;
 import com.blog.model.SysRole;
 import com.blog.service.SysRoleService;
+import com.blog.util.annotation.Log;
 import com.blog.util.base.BaseController;
 import com.blog.util.page.TableDataInfo;
 import com.blog.util.result.AjaxResult;
@@ -53,6 +55,7 @@ public class SysRoleController extends BaseController {
     /**
      * 新增角色
      */
+    @Log(title = "角色管理",operate = Constant.OPERATE_INSERTE)
     @PostMapping
     public AjaxResult add(@RequestBody SysRole sysRole)
     {
@@ -62,6 +65,7 @@ public class SysRoleController extends BaseController {
     /**
      * 修改角色
      */
+    @Log(title = "角色管理",operate = Constant.OPERATE_UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysRole sysRole)
     {
@@ -71,6 +75,7 @@ public class SysRoleController extends BaseController {
     /**
      * 删除角色
      */
+    @Log(title = "角色管理",operate = Constant.OPERATE_DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {

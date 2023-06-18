@@ -1,10 +1,12 @@
 package com.blog.controller;
 
 
+import com.blog.model.Constant;
 import com.blog.model.SysRole;
 import com.blog.model.SysUser;
 import com.blog.service.SysRoleService;
 import com.blog.service.SysUserService;
+import com.blog.util.annotation.Log;
 import com.blog.util.base.BaseController;
 import com.blog.util.page.TableDataInfo;
 import com.blog.util.result.AjaxResult;
@@ -68,6 +70,7 @@ public class SysUserController extends BaseController {
     /**
      * 新增用户
      */
+    @Log(title = "用户管理",operate = Constant.OPERATE_INSERTE)
     @PostMapping
     public AjaxResult add(@RequestBody SysUser sysUser)
     {
@@ -77,6 +80,7 @@ public class SysUserController extends BaseController {
     /**
      * 修改用户
      */
+    @Log(title = "用户管理",operate = Constant.OPERATE_UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysUser sysUser)
     {
@@ -86,6 +90,7 @@ public class SysUserController extends BaseController {
     /**
      * 删除用户
      */
+    @Log(title = "用户管理",operate = Constant.OPERATE_DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
@@ -112,6 +117,7 @@ public class SysUserController extends BaseController {
      * @param roleIds
      * @return
      */
+    @Log(title = "用户管理",operate = Constant.OPERATE_INSERTE)
     @PostMapping("/updateAuthRole")
     public AjaxResult insertAuthRole(Long userId,Long[] roleIds){
         return toAjax(sysUserService.insertAuthRole(userId,roleIds));

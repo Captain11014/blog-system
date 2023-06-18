@@ -2,8 +2,10 @@ package com.blog.controller;
 
 
 import com.blog.model.Article;
+import com.blog.model.Constant;
 import com.blog.service.ArticleService;
 import com.blog.util.StringUtil;
+import com.blog.util.annotation.Log;
 import com.blog.util.base.BaseController;
 import com.blog.util.jwt.JwtUtil;
 import com.blog.util.page.TableDataInfo;
@@ -48,12 +50,12 @@ public class ArticleController extends BaseController {
      * 查询文章博客列表
      * 连表查询
      */
+//    @Log(title = "文章管理",operate = "SELECT")
     @GetMapping("/listjoin")
     public TableDataInfo selectArticleJoinList(Article article)
     {
         startPage();
         List<Article> list = articleService.selectArticleJoinList(article);
-        System.out.println(list);
         return getDataTable(list);
     }
 
@@ -72,6 +74,7 @@ public class ArticleController extends BaseController {
      * @param article
      * @return
      */
+    @Log(title = "文章管理",operate = Constant.OPERATE_SELECT)
     @GetMapping("/selectArticleWidthFavorite")
     public TableDataInfo selectArticleWidthFavorite(Article article,HttpServletRequest request){
 
@@ -93,6 +96,7 @@ public class ArticleController extends BaseController {
      * @param article
      * @return
      */
+    @Log(title = "文章管理",operate = Constant.OPERATE_SELECT)
     @GetMapping("/selectArticleWidthBrowsingHistory")
     public TableDataInfo selectArticleWidthBrowsingHistory(Article article,HttpServletRequest request){
 //        String token = request.getHeader("token");
@@ -107,6 +111,7 @@ public class ArticleController extends BaseController {
     /**
      * 新增文章博客
      */
+    @Log(title = "文章管理",operate = Constant.OPERATE_INSERTE)
     @PostMapping
     public AjaxResult add(@RequestBody Article article)
     {
@@ -116,6 +121,7 @@ public class ArticleController extends BaseController {
     /**
      * 修改文章博客
      */
+    @Log(title = "文章管理",operate = Constant.OPERATE_UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Article article)
     {
@@ -125,6 +131,7 @@ public class ArticleController extends BaseController {
     /**
      * 删除文章博客
      */
+    @Log(title = "文章管理",operate = Constant.OPERATE_DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {

@@ -415,7 +415,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .el-dialog-div {
   height: 50vh;
   overflow-x: hidden;

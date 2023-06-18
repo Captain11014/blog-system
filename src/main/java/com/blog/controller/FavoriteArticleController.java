@@ -1,9 +1,11 @@
 package com.blog.controller;
 
 
+import com.blog.model.Constant;
 import com.blog.model.FavoriteArticle;
 import com.blog.service.FavoriteArticleService;
 import com.blog.util.StringUtil;
+import com.blog.util.annotation.Log;
 import com.blog.util.base.BaseController;
 import com.blog.util.jwt.JwtUtil;
 import com.blog.util.page.TableDataInfo;
@@ -56,6 +58,7 @@ public class FavoriteArticleController extends BaseController {
     /**
      * 新增收藏文章记录
      */
+    @Log(title = "收藏夹",operate = Constant.OPERATE_INSERTE)
     @PostMapping
     public AjaxResult add(@RequestBody FavoriteArticle favoriteArticle)
     {
@@ -65,6 +68,7 @@ public class FavoriteArticleController extends BaseController {
     /**
      * 修改收藏文章记录
      */
+    @Log(title = "收藏夹",operate = Constant.OPERATE_UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody FavoriteArticle favoriteArticle)
     {
@@ -74,6 +78,7 @@ public class FavoriteArticleController extends BaseController {
     /**
      * 删除收藏文章记录
      */
+    @Log(title = "收藏夹",operate = Constant.OPERATE_DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids, HttpServletRequest request)
     {
@@ -90,6 +95,7 @@ public class FavoriteArticleController extends BaseController {
      * 根据id判断是否已经收藏该文章
      * @return
      */
+    @Log(title = "收藏夹",operate = Constant.OPERATE_SELECT)
     @GetMapping("/selectFavoriteArticleByIdAndUserId")
     public AjaxResult selectFavoriteArticleByIdAndUserId(Long userId,Long articleId){
 
