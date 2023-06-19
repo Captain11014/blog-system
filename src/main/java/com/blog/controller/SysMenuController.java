@@ -69,6 +69,11 @@ public class SysMenuController extends BaseController {
     @PostMapping
     public AjaxResult add(@RequestBody SysMenu sysMenu)
     {
+
+        if(sysMenu.getType() == 0){
+            sysMenu.setComponent("Layout");
+        }
+
         return toAjax(sysMenuService.insertSysMenu(sysMenu));
     }
 

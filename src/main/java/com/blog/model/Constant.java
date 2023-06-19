@@ -73,6 +73,11 @@ public class Constant {
      */
     public static final String OPERATE_DELETE = "DELETE";
 
+    /**
+     * 权限的key
+     */
+    public static final String PERMS_NAME = "permsList_";
+
 
 
 }

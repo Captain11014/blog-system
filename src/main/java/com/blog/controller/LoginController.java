@@ -11,6 +11,7 @@ import com.blog.util.exception.BlogEcxeption;
 import com.blog.util.jwt.JwtUtil;
 import com.blog.util.result.AjaxResult;
 import com.blog.util.result.HttpStatus;
+import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,9 @@ public class LoginController extends BaseController {
 
     @Autowired
     private SysMenuService sysMenuService;
+
+    @Autowired
+    private Cache<String,Object> cache;
 
     /**
      * 登录
@@ -79,6 +83,10 @@ public class LoginController extends BaseController {
 
         //5.根据用户id获取用户可操作按钮列表
         List<String> permsList = sysMenuService.findMenuPermsByUserId(userId);
+
+        cache.put(Constant.PERMS_NAME+userId,permsList);
+        System.out.println("===================================");
+        System.out.println(cache.getIfPresent(Constant.PERMS_NAME+userId));
 
         Map<String, Object> map = new HashMap<>();
         map.put("name",sysUser.getUsername());

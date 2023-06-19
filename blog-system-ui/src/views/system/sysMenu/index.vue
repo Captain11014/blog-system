@@ -288,7 +288,7 @@ const defaultForm = {
   perms: undefined,
   icon: undefined,
   sortValue: 1,
-  status: 1
+  status: '1'
 };
 
 export default {

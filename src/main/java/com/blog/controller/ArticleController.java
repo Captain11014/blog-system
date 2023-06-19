@@ -6,6 +6,7 @@ import com.blog.model.Constant;
 import com.blog.service.ArticleService;
 import com.blog.util.StringUtil;
 import com.blog.util.annotation.Log;
+import com.blog.util.annotation.Permission;
 import com.blog.util.base.BaseController;
 import com.blog.util.jwt.JwtUtil;
 import com.blog.util.page.TableDataInfo;
@@ -51,6 +52,7 @@ public class ArticleController extends BaseController {
      * 连表查询
      */
 //    @Log(title = "文章管理",operate = "SELECT")
+//    @Permission("article:list")
     @GetMapping("/listjoin")
     public TableDataInfo selectArticleJoinList(Article article)
     {
@@ -112,6 +114,7 @@ public class ArticleController extends BaseController {
      * 新增文章博客
      */
     @Log(title = "文章管理",operate = Constant.OPERATE_INSERTE)
+    @Permission("article:add")
     @PostMapping
     public AjaxResult add(@RequestBody Article article)
     {
@@ -122,6 +125,7 @@ public class ArticleController extends BaseController {
      * 修改文章博客
      */
     @Log(title = "文章管理",operate = Constant.OPERATE_UPDATE)
+    @Permission("article:update")
     @PutMapping
     public AjaxResult edit(@RequestBody Article article)
     {
@@ -132,6 +136,7 @@ public class ArticleController extends BaseController {
      * 删除文章博客
      */
     @Log(title = "文章管理",operate = Constant.OPERATE_DELETE)
+    @Permission("article:del")
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
