@@ -4,7 +4,30 @@
     <!-- <span v-html=""></span> -->
 
     <div class="blogs-content">
-      <el-button
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span style="font-size:25px;">
+            <strong>{{article.title}}</strong>
+          </span>
+          <el-button
+            v-if="isShow && article.userId != sysUser.id && !isFavoite"
+            style="float: right; padding: 5px 5px"
+            type="primary"
+            icon="el-icon-star-off"
+            @click="favoriteBtn()"
+          >收藏</el-button>
+          <div style="margin-top:10px">
+            <span>
+              <span>作者：{{article.user.nickname}}</span>
+              <span style="margin-left: 20px">发布于：{{parseTime(article.createTime,'{y}-{m}-{d}')}}</span>
+            </span>
+          </div>
+        </div>
+        <div>
+          <span v-html="article.content"></span>
+        </div>
+      </el-card>
+      <!-- <el-button
         v-if="isShow && article.userId != sysUser.id && !isFavoite"
         class="editUser"
         type="primary"
@@ -14,12 +37,129 @@
       <div class="blog-title">
         <span>
           <h2>{{article.title}}</h2>
-          <!-- <div> -->
+
           <span>作者：{{article.user.nickname}}</span>
           <span style="margin-left: 20px">发布于：{{parseTime(article.createTime,'{y}-{m}-{d}')}}</span>
         </span>
       </div>
-      <span v-html="article.content"></span>
+      <div class="content-div">
+        <span v-html="article.content"></span>
+      </div>-->
+
+      <!--评论区-->
+      <el-divider content-position="left">
+        <span style="margin-right:10px">评论</span>
+        <el-button
+          v-if="isShow"
+          size="mini"
+          type="primary"
+          icon="el-icon-edit"
+          @click="handleAdd(0)"
+          circle
+        ></el-button>
+      </el-divider>
+
+      <!-- <div class="comment-div" v-if="open"> -->
+      <div class="comment-div" v-if="open1 == 0 && open">
+        <el-input
+          style="margin-left:40px"
+          class="comment-input"
+          type="textarea"
+          autosize
+          placeholder="请输入评论"
+          v-model="form.commentContent"
+        ></el-input>
+        <el-button class="comment-btn" type="primary" size="small" @click="submitForm">发布</el-button>
+      </div>
+      <div class="block">
+        <el-timeline>
+          <!-- <el-timeline-item timestamp="2018/4/12" placement="top"> -->
+          <el-card style="margin-bottom:10px" v-for="item in commentList" :key="item.id">
+            <div>
+              <div class="hean-commont">
+                <span>
+                  <strong style="margin-right:10px">{{item.sysUser.nickname}}</strong>
+                  &nbsp;&nbsp;{{parseTime(item.createTime,'{y}/{m}/{d}')}}
+                </span>
+
+                <el-button
+                  v-if="isShow"
+                  class="btn"
+                  size="mini"
+                  type="primary"
+                  @click="handleAdd(item.id,item.sysUser.id,item.id)"
+                >回复</el-button>
+
+                <el-button
+                  v-if="isShow && sysUser.id == item.sysUser.id"
+                  class="btn"
+                  style="margin-right:5px"
+                  size="mini"
+                  type="primary"
+                  @click="handleDel(item.id)"
+                >删除</el-button>
+              </div>
+              <div class="comment-div" v-if="open1 == item.id && open && isShow">
+                <el-input
+                  class="comment-input"
+                  type="textarea"
+                  autosize
+                  placeholder="请输入评论"
+                  v-model="form.commentContent"
+                ></el-input>
+                <el-button class="comment-btn" type="primary" size="small" @click="submitForm">发布</el-button>
+              </div>
+              <p>{{item.commentContent}}</p>
+              <el-divider></el-divider>
+              <div v-for="child in item.children" :key="child.id">
+                <div class="hean-commont">
+                  <span>
+                    <strong style="margin-right:10px">{{child.sysUser.nickname}}</strong>
+                    <strong style="margin-right:10px">回复</strong>
+                    <strong style="margin-right:10px">{{child.replySysUser.nickname}}</strong>
+                    &nbsp;&nbsp;{{parseTime(child.createTime,'{y}/{m}/{d}')}}
+                  </span>
+                  <el-button
+                    v-if="isShow"
+                    class="btn"
+                    size="mini"
+                    type="primary"
+                    @click="handleAdd(child.id,child.sysUser.id,item.id)"
+                  >回复</el-button>
+                  <el-button
+                    v-if="isShow && sysUser.id == child.sysUser.id"
+                    class="btn"
+                    style="margin-right:5px"
+                    size="mini"
+                    type="primary"
+                    @click="handleDel(child.id)"
+                  >删除</el-button>
+                </div>
+                <div class="comment-div" v-if="open1 == child.id && open && isShow">
+                  <el-input
+                    class="comment-input"
+                    type="textarea"
+                    autosize
+                    placeholder="请输入评论"
+                    v-model="form.commentContent"
+                  ></el-input>
+                  <el-button class="comment-btn" type="primary" size="small" @click="submitForm">发布</el-button>
+                </div>
+                <p>{{child.commentContent}}</p>
+                <el-divider></el-divider>
+              </div>
+            </div>
+          </el-card>
+          <!-- </el-timeline-item> -->
+        </el-timeline>
+      </div>
+      <pagination
+        v-show="total>0"
+        :total="total"
+        :page.sync="queryParams.pageNum"
+        :limit.sync="queryParams.pageSize"
+        @pagination="getCommentList"
+      />
     </div>
   </div>
 </template>
@@ -47,6 +187,13 @@ import {
   addHistory,
   updateHistory
 } from "@/api/system/history";
+import {
+  listComment,
+  getComment,
+  delComment,
+  addComment,
+  updateComment
+} from "@/api/system/comment";
 export default {
   name: "ArticleDetail",
   components: {
@@ -98,14 +245,35 @@ export default {
       },
       //用户已登录：true，未登录：false
       isShow: false,
-      isFavoite: false
+      isFavoite: false,
+      //是否打开对话框
+      open: false,
+      open1: 0,
+      form: {},
+      // 表单校验
+      rules: {},
+      //评论列表
+      commentList: [],
+      total: 0,
+      // 查询参数
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        parentId: null,
+        commentContent: null,
+        articleId: null,
+        userId: null,
+        replyUserId: null
+      }
     };
   },
   created() {
     const toKen = getToken();
+    console.log(toKen + "token");
     toKen ? (this.isShow = true) : (this.isShow = false);
     this.getInfo();
     this.getArticleInfo();
+    this.getCommentList();
   },
 
   mounted() {
@@ -179,7 +347,86 @@ export default {
       addHistory(browsingHistory).then(response => {
         console.log("添加浏览记录成功");
       });
-    }
+    },
+
+    // 取消按钮
+    cancel() {
+      this.open = false;
+      this.reset();
+    },
+
+    /** 新增按钮操作 */
+    handleAdd(val, replyUserId, parentId) {
+      this.reset();
+      //点击评论或者回复显示对应输入框
+      this.open ? (this.open = false) : (this.open = true);
+      if (this.open1 != val) {
+        this.open = true;
+        this.open1 = val;
+      }
+
+      // if(val == 1){
+      this.form.articleId = this.id; //文章Id
+      this.form.userId = this.sysUser.id; //当前用户id
+      this.form.replyUserId = replyUserId;
+      this.form.parentId = parentId;
+      // }
+    },
+
+    // 表单重置
+    reset() {
+      this.form = {
+        id: null,
+        parentId: null,
+        commentContent: null,
+        articleId: null,
+        userId: null,
+        replyUserId: null,
+        delFlag: null,
+        createBy: null,
+        createTime: null,
+        updateBy: null,
+        updateTime: null,
+        remark: null,
+        children: []
+      };
+      this.resetForm("form");
+    },
+
+    /** 提交按钮 */
+    submitForm() {
+      console.log(this.form);
+
+      addComment(this.form).then(response => {
+        this.$modal.msgSuccess("新增成功");
+        this.open = false;
+        this.getCommentList();
+      });
+    },
+    //获取评论数据
+    getCommentList() {
+      // let queryCommontParams = {
+      //   articleId : this.id
+      // }
+      this.queryParams.articleId = this.id;
+      listComment(this.queryParams).then(response => {
+        console.log(response);
+        this.commentList = response.rows;
+        this.total = response.total;
+      });
+    },
+
+     /** 删除按钮操作 */
+    handleDel(id) {
+      console.log(id);
+      const ids = id;
+      this.$modal.confirm('是否确认删除评论').then(function() {
+        return delComment(ids);
+      }).then(() => {
+        this.getCommentList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {});
+    },
   }
 };
 </script>
@@ -208,12 +455,43 @@ export default {
     border-bottom: 1px solid rgb(123, 120, 120);
     // margin-top: 20px;
     // span {
-      // margin-left: 20px;
+    // margin-left: 20px;
     // }
   }
   .editUser {
     position: absolute;
     right: 0;
   }
+}
+
+.comment-div {
+  // border: 1px solid red;
+  width: 100%;
+  margin-bottom: 20px;
+  .comment-input {
+    width: 80%;
+  }
+  .comment-btn {
+    float: right;
+  }
+}
+
+.hean-commont {
+  // border: 1px solid red;
+  line-height: 30px;
+  height: 30px;
+  margin-bottom: 5px;
+  .btn {
+    float: right;
+  }
+  // float:right;
+  // margin-top:-8px"
+}
+
+.content-div {
+  // border: 1px solid red;
+  margin-top: 10px;
+  width: 90%;
+  margin: 10px auto;
 }
 </style>

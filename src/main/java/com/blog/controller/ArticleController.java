@@ -74,7 +74,7 @@ public class ArticleController extends BaseController {
      * @param article
      * @return
      */
-    @Log(title = "文章管理",operate = Constant.OPERATE_SELECT)
+//    @Log(title = "文章管理",operate = Constant.OPERATE_SELECT)
     @GetMapping("/selectArticleWidthFavorite")
     public TableDataInfo selectArticleWidthFavorite(Article article,HttpServletRequest request){
 
@@ -96,7 +96,7 @@ public class ArticleController extends BaseController {
      * @param article
      * @return
      */
-    @Log(title = "文章管理",operate = Constant.OPERATE_SELECT)
+//    @Log(title = "文章管理",operate = Constant.OPERATE_SELECT)
     @GetMapping("/selectArticleWidthBrowsingHistory")
     public TableDataInfo selectArticleWidthBrowsingHistory(Article article,HttpServletRequest request){
 //        String token = request.getHeader("token");

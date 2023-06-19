@@ -17,7 +17,7 @@
             <div><span>作者：{{item.user.nickname}}</span></div>
             <div><span>发布：{{parseTime(item.createTime,'{y}-{m}-{d}')}}</span></div>
             <div><span>浏览：{{item.browsingSum}}</span></div>
-            <div><span>评论：0</span></div>
+            <div><span>评论：{{item.commentSum}}</span></div>
             <div><span>收藏：{{item.favoriteSum}}</span></div>
           </div>
 

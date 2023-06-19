@@ -256,8 +256,8 @@
         </el-form-item>
         <el-form-item label="状态" prop="type">
           <el-radio-group v-model="sysMenu.status">
-            <el-radio :label="1">正常</el-radio>
-            <el-radio :label="0">停用</el-radio>
+            <el-radio :label="'1'">正常</el-radio>
+            <el-radio :label="'0'">停用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -510,6 +510,7 @@ export default {
       this.reset();
       const id = row.id || this.ids;
       getMenu(id).then(response => {
+        console.log(response);
         this.sysMenu = response.data;
         this.dialogVisible = true;
         this.typeDisabled = true;

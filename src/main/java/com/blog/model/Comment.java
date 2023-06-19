@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -59,5 +60,39 @@ public class Comment extends BaseEntity{
      */
     private String delFlag;
 
+    /**
+     * 文章对象
+     */
+    private Article article;
+
+    /**
+     * 评论用户
+     */
+    private SysUser sysUser;
+
+    /**
+     * 被回复用户
+     */
+    private SysUser replySysUser;
+
+    /**
+     * 子节点
+     */
+    private List<Comment> children;
+
+    /**
+     * Id集合
+     */
+    private List<Long> ids;
+
+    /**
+     * 评论用户名
+     */
+    private String nickname;
+
+    /**
+     * 文章标题
+     */
+    private String title;
 
 }

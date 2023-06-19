@@ -1,7 +1,6 @@
 package com.blog.controller;
 
 import com.blog.model.*;
-import com.blog.service.FavoriteService;
 import com.blog.service.SysMenuService;
 import com.blog.service.SysUserService;
 import com.blog.util.MD5;
@@ -10,15 +9,12 @@ import com.blog.util.annotation.Log;
 import com.blog.util.base.BaseController;
 import com.blog.util.exception.BlogEcxeption;
 import com.blog.util.jwt.JwtUtil;
-import com.blog.util.page.TableDataInfo;
 import com.blog.util.result.AjaxResult;
 import com.blog.util.result.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

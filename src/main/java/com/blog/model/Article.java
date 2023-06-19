@@ -99,6 +99,11 @@ public class Article extends BaseEntity{
      */
     private BrowsingHistory browsingHistory;
 
+    /**
+     * 评论数量
+     */
+    private Integer commentSum;
+
 
 
 }
