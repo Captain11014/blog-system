@@ -114,7 +114,7 @@ public class ArticleController extends BaseController {
      * 新增文章博客
      */
     @Log(title = "文章管理",operate = Constant.OPERATE_INSERTE)
-    @Permission("article:add")
+//    @Permission("article:add")
     @PostMapping
     public AjaxResult add(@RequestBody Article article)
     {
@@ -125,7 +125,7 @@ public class ArticleController extends BaseController {
      * 修改文章博客
      */
     @Log(title = "文章管理",operate = Constant.OPERATE_UPDATE)
-    @Permission("article:update")
+//    @Permission("article:update")
     @PutMapping
     public AjaxResult edit(@RequestBody Article article)
     {
@@ -136,7 +136,7 @@ public class ArticleController extends BaseController {
      * 删除文章博客
      */
     @Log(title = "文章管理",operate = Constant.OPERATE_DELETE)
-    @Permission("article:del")
+//    @Permission("article:del")
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
