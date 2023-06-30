@@ -164,9 +164,9 @@ export default {
     },
 
     //子组件的点击事件
-    navigClick(value){
+    navigClick(value,articleTitle){
+      this.queryParams.title = articleTitle;
       console.log("dd"+value);
-
       if(value == '1'){
         this.getList();
       }else{

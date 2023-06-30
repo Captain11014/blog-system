@@ -135,39 +135,21 @@
     />
 
     <!-- 添加或修改文章博客对话框 -->
-    <el-dialog :title="title" :visible.sync="open" lock-scroll top="0" width="80%" append-to-body>
+    <el-dialog  :visible.sync="open" :fullscreen="true" :show-close="false" lock-scroll top="0" width="80%" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入标题" />
         </el-form-item>
         <!-- <div class="el-dialog-div"> -->
         <el-form-item label="文章内容">
-          <editor v-model="form.content" :height="350" />
+          <editor v-model="form.content" :height="470" />
           <!-- <el-input v-model="form.content" placeholder="请输入内容" /> -->
         </el-form-item>
-        <!-- </div> -->
-        <!-- <el-form-item label="作者用户id" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入作者用户id" />
-        </el-form-item>-->
-        <!-- <el-form-item label="审核时间" prop="auditTime">
-          <el-date-picker clearable
-            v-model="form.auditTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择审核时间">
-          </el-date-picker>
-        </el-form-item>-->
-        <!-- <el-form-item label="审核人id" prop="auditUserId">
-          <el-input v-model="form.auditUserId" placeholder="请输入审核人id" />
-        </el-form-item>-->
-        <!-- <el-form-item label="删除标志" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
-        </el-form-item>-->
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
         <el-form-item label="审核" prop="status">
-          <el-radio v-model="form.status" label="0">审核中</el-radio>
+          <!-- <el-radio v-model="form.status" label="0">审核中</el-radio> -->
           <el-radio v-model="form.status" label="1">审核通过</el-radio>
           <el-radio v-model="form.status" label="2">审核不通过</el-radio>
         </el-form-item>
@@ -442,4 +424,9 @@ export default {
 .el-dialog__footer {
     padding: 2px 20px 2px;
 }
+
+  ::v-deep .el-dialog__header, ::v-deep .el-dialog__body,::v-deep .el-dialog__footer{
+  padding: 0;
+}
+
 </style>

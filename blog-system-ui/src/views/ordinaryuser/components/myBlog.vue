@@ -26,31 +26,6 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="作者" prop="nickname">
-        <el-input
-          v-model="queryParams.params.nickname"
-          placeholder="请输入作者"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="审核时间" prop="auditTime">
-        <el-date-picker
-          clearable
-          v-model="queryParams.auditTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择审核时间"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="审核人id" prop="auditUserId">
-        <el-input
-          v-model="queryParams.auditUserId"
-          placeholder="请输入审核人id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -61,16 +36,6 @@
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd">创作</el-button>
       </el-col>
-      <!-- <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-        >审核</el-button>
-      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -139,42 +104,20 @@
     />
 
     <!-- 添加或修改文章博客对话框 -->
-    <el-dialog :title="title" :visible.sync="open" lock-scroll top="0" width="80%" append-to-body>
+    <el-dialog  :visible.sync="open" :show-close="false" :fullscreen="true" top="0" width="80%" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标题" prop="title">
+        <!-- <el-form-item label="标题" prop="title"> -->
+        <!-- <el-form-item  prop="title"> -->
           <el-input v-model="form.title" placeholder="请输入标题" />
-        </el-form-item>
-        <!-- <div class="el-dialog-div"> -->
-        <el-form-item label="文章内容">
-          <editor v-model="form.content" :height="350" />
+        <!-- </el-form-item> -->
+        <!-- <div class="el-dialog-div">  m label="文章内容"-->
+        <!-- <el-form-item > -->
+          <editor v-model="form.content" :height="575" />
           <!-- <el-input v-model="form.content" placeholder="请输入内容" /> -->
-        </el-form-item>
-        <!-- </div> -->
-        <!-- <el-form-item label="作者用户id" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入作者用户id" />
-        </el-form-item>-->
-        <!-- <el-form-item label="审核时间" prop="auditTime">
-          <el-date-picker clearable
-            v-model="form.auditTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择审核时间">
-          </el-date-picker>
-        </el-form-item>-->
-        <!-- <el-form-item label="审核人id" prop="auditUserId">
-          <el-input v-model="form.auditUserId" placeholder="请输入审核人id" />
-        </el-form-item>-->
-        <!-- <el-form-item label="删除标志" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
-        </el-form-item>-->
-        <el-form-item label="备注" prop="remark">
+        <!-- </el-form-item> -->
+        <!-- <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />
-        </el-form-item>
-        <!-- <el-form-item label="审核" prop="status">
-          <el-radio v-model="form.status" label="0">审核中</el-radio>
-          <el-radio v-model="form.status" label="1">审核通过</el-radio>
-          <el-radio v-model="form.status" label="2">审核不通过</el-radio>
-        </el-form-item>-->
+        </el-form-item> -->
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -345,6 +288,7 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      console.log(this.form);
       this.form.userId = this.userId;
       this.$refs["form"].validate(valid => {
         if (valid) {
@@ -430,10 +374,17 @@ export default {
 }
 
 .el-dialog__body {
-  padding: 2px 20px;
+  padding: 0px 0px;
 }
 
 .el-dialog__footer {
   padding: 2px 20px 2px;
 }
+.el-dialog__header{
+  padding: 0px;
+}
+  ::v-deep .el-dialog__header, ::v-deep .el-dialog__body,::v-deep .el-dialog__footer{
+  padding: 0;
+}
+
 </style>

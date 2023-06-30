@@ -12,7 +12,6 @@ public interface SysLogMapper {
 
     /**
      * 查询系统日志
-     *
      * @param id 系统日志主键
      * @return 系统日志
      */
@@ -40,7 +39,7 @@ public interface SysLogMapper {
      * @param sysLog 系统日志
      * @return 结果
      */
-    public int updateSysLog(SysLog sysLog);
+//    public int updateSysLog(SysLog sysLog);
 
     /**
      * 删除系统日志

@@ -55,7 +55,6 @@ public interface SysUserService {
 
     /**
      * 批量删除用户
-     *
      * @param ids 需要删除的用户主键集合
      * @return 结果
      */

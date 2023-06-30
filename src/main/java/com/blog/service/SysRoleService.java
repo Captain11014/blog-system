@@ -19,7 +19,6 @@ public interface SysRoleService  {
 
     /**
      * 查询角色
-     *
      * @param id 角色主键
      * @return 角色
      */

@@ -31,7 +31,6 @@ public interface SysUserMapper {
 
     /**
      * 查询用户列表
-     *
      * @param sysUser 用户
      * @return 用户集合
      */

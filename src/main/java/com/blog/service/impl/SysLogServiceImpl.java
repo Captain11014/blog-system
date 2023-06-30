@@ -20,7 +20,6 @@ public class SysLogServiceImpl implements SysLogService
 
     /**
      * 查询系统日志
-     *
      * @param id 系统日志主键
      * @return 系统日志
      */
@@ -60,11 +59,11 @@ public class SysLogServiceImpl implements SysLogService
      * @param sysLog 系统日志
      * @return 结果
      */
-    @Override
-    public int updateSysLog(SysLog sysLog)
-    {
-        return sysLogMapper.updateSysLog(sysLog);
-    }
+//    @Override
+//    public int updateSysLog(SysLog sysLog)
+//    {
+//        return sysLogMapper.updateSysLog(sysLog);
+//    }
 
     /**
      * 批量删除系统日志

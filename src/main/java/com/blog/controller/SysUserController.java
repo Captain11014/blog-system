@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * <p>
  * 用户表 前端控制器
  * </p>
- *
+ * 用户管理模块
  * @author 姓陈的
  * @since 2023-05-23
  */
@@ -38,18 +38,20 @@ public class SysUserController extends BaseController {
 
     /**
      * 查询用户列表
+     * @param sysUser 用户信息参数
+     * @return
      */
     @GetMapping("/list")
     public TableDataInfo list(SysUser sysUser)
     {
-        startPage();
+        startPage();//分页
         List<SysUser> list = sysUserService.selectSysUserList(sysUser);
         return getDataTable(list);
     }
 
 
     /**
-     * 获取用户详细信息
+     * 根据id获取用户详细信息
      */
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
@@ -59,7 +61,7 @@ public class SysUserController extends BaseController {
 
     /**
      * 根据用户名查询用户信息
-     * @param username
+     * @param username 前端传递用户名（参数）
      * @return
      */
     @GetMapping("/selectSysUserByUsername/{username}")
@@ -69,6 +71,8 @@ public class SysUserController extends BaseController {
 
     /**
      * 新增用户
+     * @param sysUser 前端传递用户参数
+     * @return
      */
     @Log(title = "用户管理",operate = Constant.OPERATE_INSERTE)
     @PostMapping
@@ -79,6 +83,8 @@ public class SysUserController extends BaseController {
 
     /**
      * 修改用户
+     * @param sysUser 前端传递用户参数 （id和用户的状态账户的停用参数（0）或（2）
+     * @return
      */
     @Log(title = "用户管理",operate = Constant.OPERATE_UPDATE)
     @PutMapping
@@ -89,6 +95,7 @@ public class SysUserController extends BaseController {
 
     /**
      * 删除用户
+     * 前端传递id数组，根据id删除
      */
     @Log(title = "用户管理",operate = Constant.OPERATE_DELETE)
     @DeleteMapping("/{ids}")

@@ -27,6 +27,7 @@ public class SysRole extends BaseEntity {
 
     /**
      * 角色id
+     *
      */
     private Long id;
 

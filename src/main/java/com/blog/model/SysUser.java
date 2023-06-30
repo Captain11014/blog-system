@@ -29,6 +29,7 @@ public class SysUser extends BaseEntity{
 
     /**
      * id
+     *
      */
     private Long id;
 

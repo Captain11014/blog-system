@@ -14,6 +14,28 @@
         <el-menu-item v-if="open" index="2">我的收藏</el-menu-item>
       </el-menu>
 
+      <el-form
+      v-if="open1"
+      class="queryForm"
+      ref="queryForm"
+      size="small"
+      :inline="true"
+      label-width="68px"
+    >
+      <el-form-item prop="title">
+        <el-input
+          v-model="articleTitle"
+          placeholder="请输入标题"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <!-- <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button> -->
+      </el-form-item>
+    </el-form>
+
       <div class="rightHead" v-if="isShow">
         <el-link :underline="false" type="primary">
           <router-link class="link-type" :to="'/login/pt'">登录</router-link>
@@ -38,7 +60,10 @@ export default {
     return {
       isShow: true,
       activeIndex: "1",
-      open: true
+      open: true,
+      open1: true,
+      value:"1",
+      articleTitle:null,
     };
   },
   created() {
@@ -55,6 +80,15 @@ export default {
     } else {
       this.open = true;
     }
+
+    if (
+      this.$route.path == "/personalcenter" ||
+      this.$route.path == "/articleDetail"
+    ) {
+      this.open1 = false;
+    } else {
+      this.open1 = true;
+    }
   },
   methods: {
     /**退出登录 */
@@ -68,8 +102,10 @@ export default {
       });
     },
 
+    //点击头部导航栏
     handleSelect(value) {
       this.toIndex();
+      this.value = value;
       console.log(value);
       this.$emit("myEvent", value);
     },
@@ -77,7 +113,12 @@ export default {
       this.$router.push({
         path: "/"
       });
-    }
+    },
+    //搜索按钮
+    handleQuery(){
+      console.log(this.value);
+      this.$emit("myEvent", this.value,this.articleTitle);
+    },
   }
 };
 </script>
@@ -129,5 +170,12 @@ export default {
     margin-left: 30px;
     // border: 1px solid red;
   }
+}
+
+.queryForm{
+  // border: 1px solid red;
+  position: absolute;
+  left: 40%;
+  top: 15px;
 }
 </style>

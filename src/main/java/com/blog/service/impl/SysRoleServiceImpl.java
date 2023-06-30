@@ -34,7 +34,6 @@ public class SysRoleServiceImpl  implements SysRoleService {
 
     /**
      * 查询角色
-     *
      * @param id 角色主键
      * @return 角色
      */
@@ -80,7 +79,7 @@ public class SysRoleServiceImpl  implements SysRoleService {
 
     /**
      * 新增角色
-     *
+     * @Transactional 事务，如果有sql执行不成功则回滚。
      * @param sysRole 角色
      * @return 结果
      */
@@ -88,11 +87,15 @@ public class SysRoleServiceImpl  implements SysRoleService {
     @Transactional
     public int insertSysRole(SysRole sysRole)
     {
+        //设置当前系统时间
         sysRole.setCreateTime(DateUtils.getNowDate());
+        //插入角色
         int i = sysRoleMapper.insertSysRole(sysRole);
+//        获取插入之后的主键
         Long roleId = sysRole.getId();
         System.out.println("==================================================="+sysRole.getId());
 
+        //如果前端分配了菜单权限则将数据插入sys_role_menu角色菜单表。
         if(StringUtil.isNotNull(sysRole.getMenuIds()) && sysRole.getMenuIds().length > 0){
             List<SysRoleMenu> sysRoleMenus = new ArrayList<>();
             for(Long menuId : sysRole.getMenuIds()){
@@ -103,7 +106,7 @@ public class SysRoleServiceImpl  implements SysRoleService {
             }
             i = sysRoleMenuMapper.batchInsert(sysRoleMenus);
         }
-
+        //如果i>0则插入成功；
         return i;
     }
 
@@ -117,10 +120,13 @@ public class SysRoleServiceImpl  implements SysRoleService {
     @Transactional
     public int updateSysRole(SysRole sysRole)
     {
+        //设置修改时间
         sysRole.setUpdateTime(DateUtils.getNowDate());
         int i = sysRoleMapper.updateSysRole(sysRole);
 
+        //如果前端分配了菜单权限则将数据插入sys_role_menu角色菜单表。
         if(StringUtil.isNotNull(sysRole.getMenuIds()) && sysRole.getMenuIds().length > 0){
+            //先将原有角色菜单的数据删除
             i = sysRoleMenuMapper.delRoleMenuByRoleId(sysRole.getId());
             List<SysRoleMenu> sysRoleMenus = new ArrayList<>();
             for(Long menuId : sysRole.getMenuIds()){
@@ -129,6 +135,7 @@ public class SysRoleServiceImpl  implements SysRoleService {
                 sysRoleMenu.setMenuId(menuId);
                 sysRoleMenus.add(sysRoleMenu);
             }
+            //新增角色菜单数据
             i = sysRoleMenuMapper.batchInsert(sysRoleMenus);
         }
 

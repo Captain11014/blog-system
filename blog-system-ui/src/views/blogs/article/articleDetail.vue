@@ -24,7 +24,8 @@
           </div>
         </div>
         <div>
-          <span v-html="article.content"></span>
+          <span class="ql-editor" v-html="article.content"></span>
+          <!-- {{article.content}} -->
         </div>
       </el-card>
       <!-- <el-button
@@ -194,6 +195,7 @@ import {
   addComment,
   updateComment
 } from "@/api/system/comment";
+import "quill/dist/quill.core.css";
 export default {
   name: "ArticleDetail",
   components: {

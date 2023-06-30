@@ -20,7 +20,7 @@ import java.util.List;
  * <p>
  * 角色 前端控制器
  * </p>
- *
+ * @RestController 将数据以json格式返回
  * @author 姓陈的
  * @since 2023-05-23
  */
@@ -34,17 +34,19 @@ public class SysRoleController extends BaseController {
 
     /**
      * 查询角色列表
+     * 前端传递sysRole角色参数
      */
     @GetMapping("/list")
     public TableDataInfo list(SysRole sysRole)
     {
-        startPage();
+        startPage(); //分页
         List<SysRole> list = sysRoleService.selectSysRoleList(sysRole);
         return getDataTable(list);
     }
 
     /**
-     * 获取角色详细信息
+     * 根据id获取角色详细信息
+     * PathVariable获取路径上的id参数
      */
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
@@ -54,6 +56,7 @@ public class SysRoleController extends BaseController {
 
     /**
      * 新增角色
+     * @RequestBody主要用来接收前端传递给后端的json字符串中的数据的(请求体中的数据的)
      */
     @Log(title = "角色管理",operate = Constant.OPERATE_INSERTE)
     @PostMapping

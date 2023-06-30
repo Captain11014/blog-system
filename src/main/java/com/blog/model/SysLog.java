@@ -18,6 +18,7 @@ public class SysLog extends BaseEntity {
 
     /**
      * 主键
+     *
      */
     private Long id;
 

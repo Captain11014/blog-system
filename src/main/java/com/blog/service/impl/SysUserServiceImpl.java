@@ -77,7 +77,9 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public int insertSysUser(SysUser sysUser)
     {
+        //设置系统时间
         sysUser.setCreateTime(DateUtils.getNowDate());
+        //md5加密密码
         if(StringUtil.isNotEmpty(sysUser.getPassword())){
             sysUser.setPassword(MD5.encrypt(sysUser.getPassword()));
         }
@@ -102,7 +104,6 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * 批量删除用户
-     *
      * @param ids 需要删除的用户主键
      * @return 结果
      */

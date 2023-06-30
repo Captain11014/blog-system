@@ -15,21 +15,25 @@ import java.util.List;
 /**
  * @author 姓陈的
  * 2023/6/18 12:53
+ * 日志
+ * @RestController 将数据以json格式返回
  */
 @RestController
 @RequestMapping("/system/log")
 public class SysLogController extends BaseController {
 
+    //自动注入
     @Autowired
     private SysLogService sysLogService;
 
     /**
      * 查询系统日志列表
+     * SysLog日志实体类的参数
      */
     @GetMapping("/list")
     public TableDataInfo list(SysLog sysLog)
     {
-        startPage();
+        startPage();//分页
         List<SysLog> list = sysLogService.selectSysLogList(sysLog);
         return getDataTable(list);
     }
@@ -37,7 +41,7 @@ public class SysLogController extends BaseController {
 
 
     /**
-     * 获取系统日志详细信息
+     * 根据id获取系统日志详细信息
      */
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
@@ -65,7 +69,7 @@ public class SysLogController extends BaseController {
 //    }
 
     /**
-     * 删除系统日志
+     * 根据id数组删除系统日志
      */
 //    @Log(title = "系统日志", operate = Constant.OPERATE_DELETE)
     @DeleteMapping("/{ids}")

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        com.blog.mapper.SysLogMapper对应mapper接口包路径-->
 <mapper namespace="com.blog.mapper.SysLogMapper">
 
   <resultMap type="SysLog" id="SysLogResult">
@@ -20,6 +21,7 @@
     select id, title, method, request_method, oper_name, oper_url, oper_ip, oper_param, json_result, status,create_time from sys_log
   </sql>
 
+<!--  SysLog参数类型，根据参数是否为空讲条件添加到sql语句-->
   <select id="selectSysLogList" parameterType="SysLog" resultMap="SysLogResult">
     <include refid="selectSysLogVo"/>
     <where>
@@ -37,6 +39,7 @@
     order by create_time desc
   </select>
 
+<!-- 逻辑删除的标记 del_flag = '0' 代表存在，2代表删除-->
   <select id="selectSysLogById" parameterType="Long" resultMap="SysLogResult">
     <include refid="selectSysLogVo"/>
     where id = #{id} and del_flag = '0'
@@ -72,26 +75,27 @@
     </trim>
   </insert>
 
-  <update id="updateSysLog" parameterType="SysLog">
-    update sys_log
-    <trim prefix="SET" suffixOverrides=",">
-      <if test="title != null">title = #{title},</if>
-      <if test="method != null">method = #{method},</if>
-      <if test="requestMethod != null">request_method = #{requestMethod},</if>
-      <if test="operName != null">oper_name = #{operName},</if>
-      <if test="operUrl != null">oper_url = #{operUrl},</if>
-      <if test="operIp != null">oper_ip = #{operIp},</if>
-      <if test="operParam != null">oper_param = #{operParam},</if>
-      <if test="jsonResult != null">json_result = #{jsonResult},</if>
-      <if test="status != null">status = #{status},</if>
-    </trim>
-    where id = #{id}
-  </update>
+<!--  <update id="updateSysLog" parameterType="SysLog">-->
+<!--    update sys_log-->
+<!--    <trim prefix="SET" suffixOverrides=",">-->
+<!--      <if test="title != null">title = #{title},</if>-->
+<!--      <if test="method != null">method = #{method},</if>-->
+<!--      <if test="requestMethod != null">request_method = #{requestMethod},</if>-->
+<!--      <if test="operName != null">oper_name = #{operName},</if>-->
+<!--      <if test="operUrl != null">oper_url = #{operUrl},</if>-->
+<!--      <if test="operIp != null">oper_ip = #{operIp},</if>-->
+<!--      <if test="operParam != null">oper_param = #{operParam},</if>-->
+<!--      <if test="jsonResult != null">json_result = #{jsonResult},</if>-->
+<!--      <if test="status != null">status = #{status},</if>-->
+<!--    </trim>-->
+<!--    where id = #{id}-->
+<!--  </update>-->
 
   <delete id="deleteSysLogById" parameterType="Long">
     update sys_log set del_flag = '2' where id = #{id}
   </delete>
 
+<!--  foreach 遍历参数 id数组中的元素 -->
   <delete id="deleteSysLogByIds" parameterType="String">
     update sys_log set del_flag = '2' where id in
     <foreach item="id" collection="array" open="(" separator="," close=")">

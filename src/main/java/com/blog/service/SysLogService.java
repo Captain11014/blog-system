@@ -20,7 +20,7 @@ public interface SysLogService {
 
     /**
      * 查询系统日志列表
-     *
+
      * @param sysLog 系统日志
      * @return 系统日志集合
      */
@@ -40,7 +40,7 @@ public interface SysLogService {
      * @param sysLog 系统日志
      * @return 结果
      */
-    public int updateSysLog(SysLog sysLog);
+//    public int updateSysLog(SysLog sysLog);
 
     /**
      * 批量删除系统日志
